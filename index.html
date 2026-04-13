@@ -1,0 +1,2429 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>医学英語プレゼンテーション トレーナー</title>
+<style>
+:root {
+  --primary: #8B0000;
+  --primary-light: #A52A2A;
+  --bg: #FAFAF8;
+  --card: #FFFFFF;
+  --text: #1a1a1a;
+  --text-secondary: #555;
+  --border: #e0ddd8;
+  --accent: #2C5F2D;
+  --accent-light: #e8f0e8;
+  --highlight: #FFF8DC;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', 'Yu Gothic', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+}
+
+header {
+  background: var(--primary);
+  color: white;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+header h1 { font-size: 1.5rem; font-weight: 700; }
+header p { font-size: 0.9rem; opacity: 0.85; margin-top: 0.3rem; }
+
+nav {
+  display: flex;
+  gap: 0;
+  background: #f5f3ef;
+  border-bottom: 2px solid var(--border);
+  overflow-x: auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav button {
+  font-family: inherit;
+  padding: 0.9rem 1.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+nav button:hover { background: #eae7e0; }
+
+nav button.active {
+  color: var(--primary);
+  font-weight: 700;
+  border-bottom-color: var(--primary);
+  background: white;
+}
+
+main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+.section { display: none; }
+.section.active { display: block; }
+
+h2 {
+  font-size: 1.4rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary);
+}
+
+h3 {
+  font-size: 1.1rem;
+  color: var(--primary-light);
+  margin: 1.5rem 0 0.7rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.card-header h3 { margin: 0; }
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.badge-required { background: #fde8e8; color: #9b1c1c; }
+.badge-optional { background: #e8f0fe; color: #1a56db; }
+
+.template-block {
+  background: var(--highlight);
+  border-left: 4px solid #DAA520;
+  padding: 1rem 1.2rem;
+  margin: 0.8rem 0;
+  border-radius: 0 4px 4px 0;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.template-block p { font-style: italic; margin: 0.3rem 0; line-height: 1.7; }
+
+.template-block .placeholder {
+  color: var(--primary);
+  font-weight: 700;
+  font-style: normal;
+}
+
+.phrase-list { list-style: none; padding: 0; }
+
+.phrase-list li {
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #f0ede8;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.phrase-list li:last-child { border-bottom: none; }
+
+.phrase-en {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.phrase-ja {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  flex: 0 0 40%;
+  text-align: right;
+}
+
+.speak-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.speak-btn:hover { background: var(--accent-light); border-color: var(--accent); }
+
+.tip {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  padding: 0.8rem 1rem;
+  margin: 0.8rem 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.92rem;
+}
+
+.tip strong { color: var(--accent); }
+
+.note-ja {
+  background: #f0f4ff;
+  border-left: 4px solid #4a6fa5;
+  padding: 0.8rem 1rem;
+  margin: 0.5rem 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Practice */
+.practice-case {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.practice-case-header {
+  background: var(--primary);
+  color: white;
+  padding: 1rem 1.5rem;
+  font-weight: 700;
+}
+
+.practice-case-body { padding: 1.5rem; }
+
+.case-info-ja {
+  background: #f8f6f2;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.93rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.practice-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.95rem;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  resize: vertical;
+  line-height: 1.7;
+  transition: border-color 0.2s;
+}
+
+.practice-textarea:focus { outline: none; border-color: var(--primary); }
+.practice-textarea::placeholder { color: #aaa; font-style: italic; }
+
+.btn-group { display: flex; gap: 0.8rem; margin-top: 1rem; flex-wrap: wrap; }
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-light); }
+
+.btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
+.btn-secondary:hover { background: #fdf5f5; }
+
+.btn-accent { background: var(--accent); color: white; }
+.btn-accent:hover { background: #3a7a3c; }
+
+.model-answer {
+  display: none;
+  margin-top: 1rem;
+  padding: 1.2rem;
+  background: var(--highlight);
+  border-radius: 4px;
+  border: 1px solid #DAA520;
+}
+
+.model-answer.show { display: block; }
+.model-answer h4 { color: #8B6914; margin-bottom: 0.5rem; }
+.model-answer p { margin: 0.4rem 0; line-height: 1.8; font-family: 'Georgia', 'Times New Roman', serif; }
+
+/* Checklist */
+.checklist { list-style: none; padding: 0; }
+
+.checklist li {
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.checklist input[type="checkbox"] {
+  margin-top: 0.35rem;
+  accent-color: var(--primary);
+  transform: scale(1.2);
+}
+
+.checklist .checked { text-decoration: line-through; color: #999; }
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0.5rem 0 1rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.case-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.case-selector button {
+  font-family: inherit;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.case-selector button.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+}
+
+.case-selector button:hover:not(.active) { border-color: var(--primary-light); }
+
+/* Quiz */
+.quiz-question {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.quiz-question > p { margin-bottom: 1rem; font-weight: 600; }
+
+.quiz-options { list-style: none; padding: 0; }
+
+.quiz-options li {
+  padding: 0.7rem 1rem;
+  margin: 0.4rem 0;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.93rem;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.quiz-options li:hover { border-color: var(--primary-light); background: #fdf8f8; }
+.quiz-options li.correct { border-color: var(--accent); background: var(--accent-light); }
+.quiz-options li.incorrect { border-color: #dc3545; background: #fde8e8; }
+.quiz-options li.disabled { pointer-events: none; }
+
+.quiz-explanation {
+  display: none;
+  margin-top: 0.8rem;
+  padding: 0.8rem;
+  background: #f8f6f2;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.quiz-explanation.show { display: block; }
+
+.score-display {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--card);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.score-number { font-size: 2.5rem; font-weight: 700; color: var(--primary); }
+
+@media (max-width: 600px) {
+  header h1 { font-size: 1.2rem; }
+  nav button { padding: 0.7rem 1rem; font-size: 0.82rem; }
+  main { padding: 1rem; }
+  .phrase-list li { flex-direction: column; gap: 0.2rem; }
+  .phrase-ja { text-align: left; flex: auto; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>医学英語プレゼンテーション トレーナー</h1>
+  <p>NEJM 症例提示 &amp; 国際学会座長のための学術英語学習教材</p>
+</header>
+
+<nav id="nav">
+  <button class="active" data-section="overview">概要</button>
+  <button data-section="template">テンプレート</button>
+  <button data-section="emtemplate">救急医の型</button>
+  <button data-section="phrases">重要フレーズ</button>
+  <button data-section="practice">練習問題</button>
+  <button data-section="quiz">確認テスト</button>
+  <button data-section="checklist">自己評価</button>
+  <button data-section="chair">座長英語</button>
+</nav>
+
+<main>
+
+<!-- ==================== 概要 ==================== -->
+<div id="overview" class="section active">
+  <h2>このトレーナーについて</h2>
+  <div class="card">
+    <p>本教材は、<strong>New England Journal of Medicine (NEJM)</strong> の「Case Records of the Massachusetts General Hospital」の形式に基づき、英語での症例プレゼンテーションを体系的に学ぶためのツールです。</p>
+    <p style="margin-top:0.5rem;">救急医として、コンサルテーションや学会発表、海外研修などの場面で求められる英語での症例提示スキルを身につけましょう。</p>
+
+    <h3>学習の進め方</h3>
+    <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+      <li><strong>テンプレート</strong> ― NEJMスタイルの症例プレゼンテーションの型を学ぶ</li>
+      <li><strong>重要フレーズ</strong> ― 各セクションで使う定型表現を日本語対訳付きで習得する</li>
+      <li><strong>練習問題</strong> ― 日本語の症例情報を英語でプレゼンする練習を行う</li>
+      <li><strong>確認テスト</strong> ― NEJMの表現ルールに関するクイズで理解度を確認する</li>
+      <li><strong>自己評価</strong> ― チェックリストでプレゼンスキルの到達度を自己評価する</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>NEJM 症例プレゼンテーションの構成</h3>
+    <p style="margin-top: 0.5rem;">NEJM の Case Records は非常に標準化された構成に従っています。以下の順序で提示するのが基本です：</p>
+    <ol style="margin: 1rem 0 0 1.5rem;">
+      <li><strong>Opening Statement</strong>（冒頭の一文）</li>
+      <li><strong>History of Present Illness: HPI</strong>（現病歴）</li>
+      <li><strong>Past Medical History: PMH</strong>（既往歴）</li>
+      <li><strong>Medications &amp; Allergies</strong>（常用薬・アレルギー）</li>
+      <li><strong>Social History</strong>（社会歴）</li>
+      <li><strong>Family History</strong>（家族歴）</li>
+      <li><strong>Review of Systems: ROS</strong>（システムレビュー）</li>
+      <li><strong>Physical Examination</strong>（身体所見）</li>
+      <li><strong>Laboratory &amp; Imaging</strong>（検査・画像所見）</li>
+      <li><strong>Hospital Course</strong>（入院後経過）</li>
+      <li><strong>Summary &amp; Differential Diagnosis</strong>（要約と鑑別診断）</li>
+    </ol>
+  </div>
+
+  <div class="tip">
+    <strong>ポイント：</strong>NEJM形式では、冒頭の一文（Opening Statement）が最も重要です。患者の年齢、性別、主訴、既往歴、受診の場を一文で簡潔にまとめます。
+  </div>
+</div>
+
+<!-- ==================== テンプレート ==================== -->
+<div id="template" class="section">
+  <h2>プレゼンテーション テンプレート</h2>
+  <p style="margin-bottom:1rem; color:var(--text-secondary);">各セクションのテンプレートと、NEJM特有の表現ルールを解説します。黄色の枠内が英語の定型表現です。</p>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>1. Opening Statement（冒頭の一文）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <p>冒頭の一文で症例の全体像を提示します。<strong>年齢・性別・主な既往歴・主訴・受診状況</strong>を含めます。</p>
+    <div class="template-block">
+      <p>"A <span class="placeholder">[年齢]</span>-year-old <span class="placeholder">[man/woman]</span> with a history of <span class="placeholder">[既往歴]</span> presented to the emergency department with <span class="placeholder">[主訴]</span> of <span class="placeholder">[期間]</span> duration."</p>
+    </div>
+    <div class="note-ja">
+      <strong>日本語との違い：</strong>日本語では「62歳男性。主訴：胸痛」のように箇条書きにしますが、英語のNEJM形式では必ず<strong>一つの完全な文</strong>にまとめます。
+    </div>
+    <div class="tip">
+      <strong>NEJMルール：</strong>
+      <ul style="margin:0.3rem 0 0 1rem;">
+        <li>「came to」ではなく <strong>"presented to"</strong> を使う</li>
+        <li>「female / male」ではなく <strong>"woman / man"</strong> を使う</li>
+        <li>既往が特にない場合は <strong>"with no significant past medical history"</strong></li>
+        <li>期間は必ず明記する（例：of three days' duration）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>2. History of Present Illness: HPI（現病歴）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <p>病歴の核心部分です。<strong>時系列</strong>に沿って、症状の発症から受診までの経過を述べます。</p>
+    <div class="template-block">
+      <p>"The patient was in <span class="placeholder">[his/her/their]</span> usual state of health until <span class="placeholder">[期間]</span> before admission, when <span class="placeholder">[症状の発症]</span>."</p>
+      <p>"The <span class="placeholder">[症状]</span> was <span class="placeholder">[性状]</span>, <span class="placeholder">[程度: rated X/10]</span>, located in the <span class="placeholder">[部位]</span>, radiating to the <span class="placeholder">[放散部位]</span>."</p>
+      <p>"Associated symptoms included <span class="placeholder">[随伴症状]</span>. The patient denied <span class="placeholder">[陰性所見]</span>."</p>
+      <p>"The patient was evaluated at an outside facility, where <span class="placeholder">[前医での検査・治療]</span> was performed."</p>
+    </div>
+    <div class="note-ja">
+      <strong>覚えておくべき表現：</strong>
+      <ul style="margin:0.3rem 0 0 1rem;">
+        <li>「普段の健康状態であった」→ <em>"was in their usual state of health"</em></li>
+        <li>「〜を否定した」→ <em>"The patient denied..."</em>（問診で確認して陰性だったことを示す定型表現）</li>
+        <li>「前医で」→ <em>"at an outside hospital / facility"</em></li>
+      </ul>
+    </div>
+    <div class="tip">
+      <strong>ポイント：</strong>症状の記述には <strong>OPQRST</strong>（Onset, Provocation/Palliation, Quality, Radiation, Severity, Timing）のフレームワークを使うと整理しやすくなります。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>3. Past Medical History: PMH（既往歴）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <div class="template-block">
+      <p>"The past medical history was notable for <span class="placeholder">[疾患名]</span>."</p>
+      <p>"Past surgical history included <span class="placeholder">[手術名（年）]</span>."</p>
+      <p>"The patient had no known drug allergies." / "Allergies included <span class="placeholder">[薬剤名]</span>, which caused <span class="placeholder">[反応]</span>."</p>
+    </div>
+    <div class="note-ja">
+      <strong>「notable for」の使い方：</strong>「〜が特徴的であった」という意味の定型表現です。NEJMでは既往歴・検査所見など幅広く使われます。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>4. Medications（常用薬）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <div class="template-block">
+      <p>"Home medications included <span class="placeholder">[薬剤名]</span> <span class="placeholder">[用量]</span> <span class="placeholder">[頻度]</span>."</p>
+    </div>
+    <div class="note-ja">
+      <strong>頻度の表現：</strong>NEJMでは略語を使いません。BID → <em>"twice daily"</em>、TID → <em>"three times daily"</em>、QHS → <em>"at bedtime"</em> と書きます。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>5. Social History（社会歴）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <div class="template-block">
+      <p>"The patient <span class="placeholder">[lived alone / with family]</span> and worked as a <span class="placeholder">[職業]</span>."</p>
+      <p>"They <span class="placeholder">[did not smoke / had a X pack-year smoking history]</span>."</p>
+      <p>"They consumed alcohol <span class="placeholder">[socially / X drinks per week / did not consume alcohol]</span>."</p>
+      <p>"They denied illicit drug use."</p>
+    </div>
+    <div class="note-ja">
+      <strong>代名詞について：</strong>近年のNEJMでは、性別に関わらず <strong>"they/them"</strong> を単数代名詞として使う傾向があります。<br>
+      <strong>喫煙歴：</strong>「pack-year」は（1日の喫煙箱数）×（喫煙年数）で計算します。例：1日1箱を20年 = 20 pack-year
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>6. Family History（家族歴）</h3>
+      <span class="badge badge-optional">必要に応じて</span>
+    </div>
+    <div class="template-block">
+      <p>"The family history was notable for <span class="placeholder">[疾患]</span> in the patient's <span class="placeholder">[続柄]</span>."</p>
+      <p>"There was no family history of <span class="placeholder">[疾患]</span>."</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>7. Review of Systems: ROS（システムレビュー）</h3>
+      <span class="badge badge-optional">関連所見のみ</span>
+    </div>
+    <div class="template-block">
+      <p>"A review of systems was notable for <span class="placeholder">[陽性所見]</span>. It was otherwise negative."</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>8. Physical Examination（身体所見）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <p>まず全体的な印象（General Appearance）を述べ、次にバイタルサイン、その後頭から足へ（Head to Toe）の順に所見を述べます。</p>
+    <div class="template-block">
+      <p>"On examination, the patient appeared <span class="placeholder">[全身状態]</span>."</p>
+      <p>"The vital signs were as follows: temperature <span class="placeholder">[X]</span>&deg;C, heart rate <span class="placeholder">[X]</span> beats per minute, blood pressure <span class="placeholder">[X/X]</span> mm Hg, respiratory rate <span class="placeholder">[X]</span> breaths per minute, and oxygen saturation <span class="placeholder">[X]</span>% while breathing <span class="placeholder">[room air / X liters of supplemental oxygen]</span>."</p>
+      <p>"The lungs were <span class="placeholder">[clear to auscultation bilaterally / 所見]</span>."</p>
+      <p>"Cardiac examination revealed <span class="placeholder">[所見]</span>."</p>
+      <p>"The abdomen was <span class="placeholder">[soft, nontender, nondistended / 所見]</span>."</p>
+      <p>"The neurological examination revealed <span class="placeholder">[所見]</span>."</p>
+    </div>
+    <div class="note-ja">
+      <strong>バイタルサインの重要ルール：</strong>
+      <ul style="margin:0.3rem 0 0 1rem;">
+        <li>「bpm」ではなく <strong>"beats per minute"</strong> と省略せずに記載する</li>
+        <li>酸素飽和度には必ず<strong>酸素投与条件</strong>を付記する（room air か supplemental oxygen か）</li>
+        <li>略語（HR, BP, RR, SpO2）はNEJMの正式なプレゼンテーションでは使わない</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>9. Laboratory &amp; Imaging（検査・画像所見）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <div class="template-block">
+      <p>"Laboratory studies revealed <span class="placeholder">[主な所見]</span>."</p>
+      <p>"A chest radiograph showed <span class="placeholder">[所見]</span>."</p>
+      <p>"Computed tomography (CT) of the <span class="placeholder">[部位]</span>, performed with/without intravenous contrast, revealed <span class="placeholder">[所見]</span>."</p>
+      <p>"An electrocardiogram (ECG) showed <span class="placeholder">[所見]</span>."</p>
+    </div>
+    <div class="note-ja">
+      <strong>重要なルール：</strong>
+      <ul style="margin:0.3rem 0 0 1rem;">
+        <li>略語は<strong>初出時に正式名称を記載</strong>し、括弧内に略語を添える（例：computed tomography (CT)）</li>
+        <li>全ての検査値を読み上げるのではなく、<strong>臨床的に重要な異常値のみ</strong>を報告する</li>
+        <li>画像検査では<strong>モダリティ・撮影部位・造影の有無</strong>を明記する</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>10. Hospital Course（入院後経過）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <div class="template-block">
+      <p>"The patient was admitted to the <span class="placeholder">[病棟/ICU]</span>."</p>
+      <p>"On hospital day <span class="placeholder">[X]</span>, <span class="placeholder">[イベント/変化]</span> occurred."</p>
+      <p>"A diagnostic procedure was performed."</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>11. Summary Statement（要約）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <p>プレゼンテーションの最後に、症例の要点を凝縮した要約文を述べます。鑑別診断へのブリッジとなります。</p>
+    <div class="template-block">
+      <p>"In summary, this is a <span class="placeholder">[年齢]</span>-year-old <span class="placeholder">[man/woman]</span> with <span class="placeholder">[主な既往]</span> who presented with <span class="placeholder">[主症状]</span>, and was found to have <span class="placeholder">[主要所見]</span>, raising concern for <span class="placeholder">[鑑別診断]</span>."</p>
+    </div>
+    <div class="note-ja">
+      <strong>要約のコツ：</strong>単に全てを繰り返すのではなく、<strong>診断推論に最も重要な情報だけ</strong>を抽出して簡潔にまとめます。
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 救急医の症例提示 ==================== -->
+<div id="emtemplate" class="section">
+  <h2>救急医のための症例提示テンプレート</h2>
+  <p style="margin-bottom:0.5rem; color: var(--text-secondary);">NEJM形式をベースにしつつ、救急医特有の<strong>「安定/不安定の判断 → 一次評価（Primary Survey: ABC）→ 蘇生 → 二次評価（Secondary Survey）」</strong>の思考過程を反映したプレゼンテーション構成です。</p>
+
+  <!-- 比較図 -->
+  <div class="card">
+    <h3>従来のNEJM形式 vs 救急医の症例提示</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:0.8rem;">
+      <div style="background:#f8f6f2; padding:1rem; border-radius:6px;">
+        <strong style="color:var(--text-secondary);">従来のNEJM形式</strong>
+        <ol style="margin:0.5rem 0 0 1.2rem; font-size:0.9rem;">
+          <li>Opening Statement</li>
+          <li>HPI（時系列で詳細に）</li>
+          <li>PMH / Medications</li>
+          <li>Social / Family History</li>
+          <li>Physical Examination</li>
+          <li>Laboratory &amp; Imaging</li>
+          <li>Hospital Course</li>
+          <li>Summary</li>
+        </ol>
+        <p style="margin-top:0.5rem; font-size:0.85rem; color:var(--text-secondary);">→ 内科的思考に沿った構成。病歴を先に全て述べてから所見へ進む。</p>
+      </div>
+      <div style="background:#fde8e8; padding:1rem; border-radius:6px; border:2px solid var(--primary);">
+        <strong style="color:var(--primary);">救急医の症例提示</strong>
+        <ol style="margin:0.5rem 0 0 1.2rem; font-size:0.9rem;">
+          <li>Opening &amp; Prehospital</li>
+          <li style="color:var(--primary); font-weight:700;">Initial Impression（安定/不安定）</li>
+          <li style="color:var(--primary); font-weight:700;">Primary Survey（A・B・C・D・E）</li>
+          <li style="color:var(--primary); font-weight:700;">Resuscitation（初期蘇生）</li>
+          <li>Secondary Survey（二次評価＋病歴）</li>
+          <li>Workup（検査・画像）</li>
+          <li>Clinical Course &amp; Disposition</li>
+          <li>Summary</li>
+        </ol>
+        <p style="margin-top:0.5rem; font-size:0.85rem; color:var(--primary);">→ 生理学的異常の認知と介入を優先。「まず安定化、それから診断」の原則。</p>
+      </div>
+    </div>
+    <div class="note-ja" style="margin-top:1rem;">
+      <strong>なぜ救急医は構成が異なるのか：</strong>救急医療では、患者の生理学的安定性の評価と蘇生が診断に先行します。「Treat first what kills first」の原則に基づき、<strong>ABCの異常を認識→即座に介入→安定化してから詳細な病歴聴取</strong>という流れで症例を提示することで、救急医としての臨床判断を明確に伝えることができます。
+    </div>
+  </div>
+
+  <!-- テンプレート詳細 -->
+  <div class="card">
+    <div class="card-header">
+      <h3>1. Opening Statement &amp; Prehospital（冒頭と病院前情報）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <p>NEJM形式の冒頭文に加え、<strong>搬送手段・現場の状況・病院前介入</strong>を述べます。救急医にとって病院前情報は診療の出発点です。</p>
+    <div class="template-block">
+      <p>"A <span class="placeholder">[年齢]</span>-year-old <span class="placeholder">[man/woman]</span> with <span class="placeholder">[既往歴 / no significant past medical history]</span> was brought to the emergency department by <span class="placeholder">[emergency medical services / private vehicle / helicopter]</span> after <span class="placeholder">[受傷機転・発症状況]</span>."</p>
+    </div>
+    <div class="template-block">
+      <p>"Prehospital report indicated <span class="placeholder">[現場の状況]</span>. In the field, the patient was found to be <span class="placeholder">[意識レベル・バイタルの概要]</span>. Prehospital interventions included <span class="placeholder">[介入内容]</span>."</p>
+    </div>
+    <div class="note-ja">
+      <strong>病院前情報で含めるべき要素：</strong>
+      <ul style="margin:0.3rem 0 0 1rem;">
+        <li><strong>外傷：</strong>受傷機転（mechanism of injury）、現場の状況、搬送時間</li>
+        <li><strong>内因性：</strong>発症状況（目撃の有無）、バイスタンダーの対応</li>
+        <li><strong>病院前介入：</strong>気管挿管、輸液、昇圧剤、除細動など</li>
+      </ul>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('A 45-year-old man with no significant past medical history was brought to the emergency department by emergency medical services following a high-speed motor vehicle collision.')">&#128264;</button>
+        <span class="phrase-en">...was brought to the ED by EMS following a high-speed motor vehicle collision.</span>
+        <span class="phrase-ja">高速度の自動車衝突事故で救急搬送された</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Prehospital report indicated that the patient was an unrestrained driver involved in a head-on collision at approximately 60 miles per hour with significant windshield damage and a prolonged extrication time of 30 minutes.')">&#128264;</button>
+        <span class="phrase-en">Prehospital report indicated that the patient was an unrestrained driver... with a prolonged extrication time of [X] minutes.</span>
+        <span class="phrase-ja">病院前情報では、シートベルト非着用の運転者で…救出に[X]分を要した</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('In the field, the patient was found to be unresponsive with a Glasgow Coma Scale score of 6. The patient was intubated in the field and received 2 liters of normal saline en route.')">&#128264;</button>
+        <span class="phrase-en">In the field, the patient was found to be unresponsive with a GCS of [X]. The patient was intubated in the field and received [介入] en route.</span>
+        <span class="phrase-ja">現場で無反応、GCS [X]。現場で気管挿管され、搬送中に[介入]が施行された</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--primary);">
+    <div class="card-header">
+      <h3>2. Initial Impression（第一印象：安定 vs 不安定）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <p>患者を一目見た瞬間の<strong>生理学的安定性の判断</strong>を明言します。これは救急医の症例提示で最も重要な部分です。</p>
+    <div class="template-block">
+      <p>"On arrival, the patient appeared <span class="placeholder">[hemodynamically stable / hemodynamically unstable / in extremis / in cardiopulmonary arrest]</span>."</p>
+    </div>
+    <div class="template-block">
+      <p>"The initial vital signs were: temperature <span class="placeholder">[X]</span>&deg;C, heart rate <span class="placeholder">[X]</span> beats per minute, blood pressure <span class="placeholder">[X/X]</span> mm Hg, respiratory rate <span class="placeholder">[X]</span> breaths per minute, and oxygen saturation <span class="placeholder">[X]</span>% <span class="placeholder">[while breathing room air / on X liters / on bag-valve-mask ventilation]</span>."</p>
+    </div>
+    <div class="note-ja">
+      <strong>安定性の4段階：</strong>
+      <ul style="margin:0.3rem 0 0 1rem;">
+        <li><strong>Stable（安定）</strong>― バイタル正常、直ちに介入不要</li>
+        <li><strong>Hemodynamically unstable（循環動態不安定）</strong>― ショック徴候あり、蘇生が必要</li>
+        <li><strong>In extremis（瀕死状態）</strong>― 差し迫った心停止のリスク</li>
+        <li><strong>In cardiopulmonary arrest（心肺停止）</strong>― CPR進行中</li>
+      </ul>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('On arrival, the patient appeared hemodynamically unstable, with cool and mottled extremities, and was in obvious respiratory distress.')">&#128264;</button>
+        <span class="phrase-en">On arrival, the patient appeared hemodynamically unstable, with cool and mottled extremities, and was in obvious respiratory distress.</span>
+        <span class="phrase-ja">来院時、循環動態不安定で、四肢は冷たく網状チアノーゼあり、明らかな呼吸窮迫を認めた</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The patient arrived in extremis, with agonal respirations and a barely palpable pulse.')">&#128264;</button>
+        <span class="phrase-en">The patient arrived in extremis, with agonal respirations and a barely palpable pulse.</span>
+        <span class="phrase-ja">瀕死の状態で搬入され、あえぎ呼吸で脈拍は辛うじて触知できる程度であった</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('On arrival, the patient appeared clinically stable, was alert and oriented, and was in no acute distress.')">&#128264;</button>
+        <span class="phrase-en">On arrival, the patient appeared clinically stable, was alert and oriented, and was in no acute distress.</span>
+        <span class="phrase-ja">来院時、臨床的に安定しており、意識清明で、急性の苦痛所見はなかった</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--primary);">
+    <div class="card-header">
+      <h3>3. Primary Survey（一次評価：ABCDE）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <p>生命を脅かす異常を<strong>A→B→C→D→E</strong>の順に系統的に評価します。各項目で<strong>所見と、異常があった場合の即時介入</strong>を一対で述べます。</p>
+
+    <h3 style="font-size:1rem; color:var(--primary);">A: Airway（気道）</h3>
+    <div class="template-block">
+      <p>"<span class="placeholder">[The airway was patent and self-maintained. / The airway was compromised due to (原因). Endotracheal intubation was performed using (方法).]</span>"</p>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('The airway was patent and self-maintained. The patient was speaking in full sentences.')">&#128264;</button>
+        <span class="phrase-en">The airway was patent and self-maintained. The patient was speaking in full sentences.</span>
+        <span class="phrase-ja">気道は開通し自己維持されていた。完全な文で発話していた</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The airway was compromised with audible stridor and pooling of secretions. Rapid sequence intubation was performed using ketamine and rocuronium, and a grade 2 view was obtained on direct laryngoscopy. The endotracheal tube was confirmed in position by end-tidal CO2 and bilateral breath sounds.')">&#128264;</button>
+        <span class="phrase-en">The airway was compromised with audible stridor and pooling of secretions. Rapid sequence intubation was performed using [薬剤]...</span>
+        <span class="phrase-ja">吸気性喘鳴と分泌物貯留で気道が障害されていた。[薬剤]で迅速導入気管挿管を施行…</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The cervical spine was immobilized with a rigid collar due to the mechanism of injury.')">&#128264;</button>
+        <span class="phrase-en">The cervical spine was immobilized with a rigid collar due to the mechanism of injury.</span>
+        <span class="phrase-ja">受傷機転から頸椎カラーで固定した</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--primary);">B: Breathing（呼吸）</h3>
+    <div class="template-block">
+      <p>"On assessment of breathing, <span class="placeholder">[所見]</span>. The respiratory rate was <span class="placeholder">[X]</span> breaths per minute, and the oxygen saturation was <span class="placeholder">[X]</span>% on <span class="placeholder">[酸素投与条件]</span>. <span class="placeholder">[介入内容（あれば）]</span>."</p>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('On assessment of breathing, the chest wall was moving symmetrically. Breath sounds were present and equal bilaterally. The oxygen saturation was 98% on room air.')">&#128264;</button>
+        <span class="phrase-en">The chest wall was moving symmetrically. Breath sounds were present and equal bilaterally.</span>
+        <span class="phrase-ja">胸壁は左右対称に動いていた。呼吸音は両側均等に聴取された</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Breath sounds were diminished on the right side with tracheal deviation to the left, concerning for a right-sided tension pneumothorax. A needle decompression was performed in the right second intercostal space at the midclavicular line, followed by insertion of a 28 French chest tube.')">&#128264;</button>
+        <span class="phrase-en">Breath sounds were diminished on the right with tracheal deviation to the left, concerning for a right-sided tension pneumothorax. Needle decompression was performed...</span>
+        <span class="phrase-ja">右側の呼吸音減弱と気管の左方偏位あり、右緊張性気胸を疑った。針減圧を施行…</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The patient was placed on 15 liters per minute of oxygen via a non-rebreather mask, with improvement in oxygen saturation from 82% to 95%.')">&#128264;</button>
+        <span class="phrase-en">The patient was placed on 15 liters of oxygen via a non-rebreather mask, with improvement in saturation from [X]% to [Y]%.</span>
+        <span class="phrase-ja">リザーバーマスクで15L/分の酸素を投与し、SpO2は[X]%から[Y]%に改善した</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--primary);">C: Circulation（循環）</h3>
+    <div class="template-block">
+      <p>"Circulatory assessment revealed <span class="placeholder">[所見]</span>. Two large-bore intravenous lines were established. <span class="placeholder">[蘇生内容]</span>."</p>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('The heart rate was 130 beats per minute, and the blood pressure was 72 over 40 mm Hg. The skin was cool and diaphoretic, and the capillary refill time was prolonged at 5 seconds. Two large-bore intravenous lines were established, and a massive transfusion protocol was activated. The patient received 2 units of packed red blood cells and 2 units of fresh frozen plasma.')">&#128264;</button>
+        <span class="phrase-en">HR 130, BP 72/40 mm Hg. The skin was cool and diaphoretic, CRT prolonged at 5 seconds. Two large-bore IVs were established, and a massive transfusion protocol was activated.</span>
+        <span class="phrase-ja">心拍数130、血圧72/40 mmHg。皮膚は冷たく湿潤、CRT 5秒に延長。太径静脈路2本を確保し、大量輸血プロトコルを発動した</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('There was an obvious deformity of the pelvis on compression. A pelvic binder was applied.')">&#128264;</button>
+        <span class="phrase-en">There was an obvious deformity of the pelvis on compression. A pelvic binder was applied.</span>
+        <span class="phrase-ja">骨盤の圧迫で明らかな不安定性あり。骨盤バインダーを装着した</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Active external hemorrhage was noted from a laceration on the right thigh. Direct pressure was applied, and hemostasis was achieved.')">&#128264;</button>
+        <span class="phrase-en">Active external hemorrhage was noted from a laceration on the [部位]. Direct pressure was applied, and hemostasis was achieved.</span>
+        <span class="phrase-ja">[部位]の裂創から活動性の外出血あり。直接圧迫で止血が得られた</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--primary);">D: Disability（意識・神経）</h3>
+    <div class="template-block">
+      <p>"Neurological assessment revealed a Glasgow Coma Scale score of <span class="placeholder">[X]</span> (<span class="placeholder">[E_/V_/M_]</span>). The pupils were <span class="placeholder">[所見]</span>. <span class="placeholder">[局所神経所見]</span>."</p>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Neurological assessment revealed a Glasgow Coma Scale score of 7, with eye opening to pain, incomprehensible sounds, and abnormal flexion. The pupils were 3 millimeters bilaterally and reactive to light.')">&#128264;</button>
+        <span class="phrase-en">GCS of 7 (E2V2M3). The pupils were 3 mm bilaterally and reactive to light.</span>
+        <span class="phrase-ja">GCS 7点（E2V2M3）。瞳孔は両側3mmで対光反射あり</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The right pupil was fixed and dilated at 6 millimeters, raising concern for uncal herniation. Mannitol 1 gram per kilogram was administered intravenously, and neurosurgery was emergently consulted.')">&#128264;</button>
+        <span class="phrase-en">The right pupil was fixed and dilated at 6 mm, raising concern for uncal herniation. Mannitol was administered, and neurosurgery was emergently consulted.</span>
+        <span class="phrase-ja">右瞳孔6mmに散大・固定、鉤ヘルニアが懸念された。マンニトールを投与し脳外科に緊急コンサルトした</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--primary);">E: Exposure（脱衣と体温管理）</h3>
+    <div class="template-block">
+      <p>"The patient was fully exposed. <span class="placeholder">[全身の視診所見]</span>. The core temperature was <span class="placeholder">[X]</span>&deg;C. <span class="placeholder">[保温処置]</span>."</p>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('The patient was fully exposed. A large contusion was noted across the anterior chest wall. No other external injuries were identified. The core temperature was 35.2 degrees Celsius. Active warming measures were initiated.')">&#128264;</button>
+        <span class="phrase-en">The patient was fully exposed. A large contusion was noted across the anterior chest wall. Core temperature was 35.2°C. Active warming was initiated.</span>
+        <span class="phrase-ja">全身を脱衣して観察。前胸部に大きな挫傷あり。深部体温35.2℃。積極的復温を開始した</span>
+      </li>
+    </ul>
+
+    <div class="tip">
+      <strong>Primary Surveyの提示ルール：</strong>ABCDEの各項目で<strong>①所見 → ②判断 → ③介入</strong>を一対で述べることが重要です。「気胸を疑う所見があった」だけでなく「→ 針減圧を施行した」まで述べることで、臨床判断と行動を明確に示します。
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--primary);">
+    <div class="card-header">
+      <h3>4. Resuscitation（初期蘇生のまとめ）</h3>
+      <span class="badge badge-required">不安定な場合は必須</span>
+    </div>
+    <p>Primary Surveyで行った介入の結果と、蘇生への反応（response to resuscitation）をまとめます。</p>
+    <div class="template-block">
+      <p>"In summary of the initial resuscitation: <span class="placeholder">[介入内容の要約]</span>. Following these interventions, the patient's hemodynamics <span class="placeholder">[improved / remained unstable / deteriorated further]</span>, with the blood pressure <span class="placeholder">[improving to X/X mm Hg / remaining at X/X mm Hg despite resuscitation]</span>."</p>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Following initial resuscitation with 2 units of packed red blood cells and 1 gram of tranexamic acid, the blood pressure improved to 95 over 62 mm Hg, and the heart rate decreased to 108 beats per minute. The patient was classified as a transient responder.')">&#128264;</button>
+        <span class="phrase-en">Following initial resuscitation with [介入], the BP improved to [X/X] mm Hg. The patient was classified as a [transient responder / responder / non-responder].</span>
+        <span class="phrase-ja">初期蘇生（[介入]）後、血圧は[X/X] mmHgに改善。一過性反応者（transient responder）と判断した</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Despite aggressive fluid resuscitation and initiation of norepinephrine, the patient remained hemodynamically unstable, prompting emergent surgical consultation.')">&#128264;</button>
+        <span class="phrase-en">Despite aggressive resuscitation and [昇圧剤], the patient remained hemodynamically unstable, prompting emergent [科] consultation.</span>
+        <span class="phrase-ja">積極的蘇生と[昇圧剤]にもかかわらず循環動態は不安定で、[科]に緊急コンサルトした</span>
+      </li>
+    </ul>
+    <div class="note-ja">
+      <strong>蘇生反応の分類（外傷の場合）：</strong>
+      <ul style="margin:0.3rem 0 0 1rem;">
+        <li><strong>Responder（反応者）</strong>― 輸液で安定が維持される</li>
+        <li><strong>Transient responder（一過性反応者）</strong>― 一時改善するが再び悪化。手術やIVRの適応を考慮</li>
+        <li><strong>Non-responder（非反応者）</strong>― 蘇生に反応しない。緊急手術の適応</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>5. Secondary Survey（二次評価）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <p>一次評価と初期蘇生で生理学的安定化が得られた後、<strong>詳細な病歴聴取（AMPLE / SAMPLER）</strong>と<strong>Head-to-Toe の系統的診察</strong>を行います。ここは従来のNEJM形式に近い内容です。</p>
+
+    <h3 style="font-size:1rem; color:var(--accent);">病歴（AMPLE）</h3>
+    <div class="template-block">
+      <p>"Once the patient was stabilized, a more detailed history was obtained. <span class="placeholder">[情報源: The patient reported... / According to the family... / EMS records indicated...]</span>"</p>
+      <p>"<strong>A</strong>llergies: <span class="placeholder">[NKDA / アレルギー]</span>. <strong>M</strong>edications: <span class="placeholder">[薬剤]</span>. <strong>P</strong>ast medical history: <span class="placeholder">[既往歴]</span>. <strong>L</strong>ast meal: <span class="placeholder">[最終経口摂取]</span>. <strong>E</strong>vents leading to presentation: <span class="placeholder">[発症前の状況]</span>."</p>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Once the patient was stabilized, a more detailed history was obtained from the patient and his family. He had no known drug allergies. Home medications included aspirin 100 milligrams daily and amlodipine 5 milligrams daily. Past medical history was notable for hypertension and prior myocardial infarction 5 years ago. His last oral intake was approximately 6 hours before presentation.')">&#128264;</button>
+        <span class="phrase-en">Once the patient was stabilized, a more detailed history was obtained from [情報源]. Allergies: [X]. Medications: [X]. PMH was notable for [X]. Last oral intake was approximately [X] hours before presentation.</span>
+        <span class="phrase-ja">安定化後、[情報源]から詳細な病歴を聴取。アレルギー：[X]。常用薬：[X]。既往歴：[X]。最終経口摂取は来院の約[X]時間前</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--accent);">Head-to-Toe 診察</h3>
+    <div class="template-block">
+      <p>"A complete secondary survey was performed. Examination of the head revealed <span class="placeholder">[所見]</span>. The face showed <span class="placeholder">[所見]</span>. The neck examination, after removal of the cervical collar with in-line stabilization, revealed <span class="placeholder">[所見]</span>. The chest was <span class="placeholder">[所見]</span>. The abdomen was <span class="placeholder">[所見]</span>. The pelvis was <span class="placeholder">[所見]</span>. Examination of the extremities revealed <span class="placeholder">[所見]</span>. The back was examined with a log-roll, which revealed <span class="placeholder">[所見]</span>."</p>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('A complete secondary survey was performed. There was a 5 centimeter laceration on the right parietal scalp with active oozing. The face was without deformity or crepitus. The neck examination, after removal of the cervical collar with in-line stabilization, revealed no midline tenderness and no step-off deformity.')">&#128264;</button>
+        <span class="phrase-en">There was a 5-cm laceration on the right parietal scalp... The neck examination, after removal of the cervical collar with in-line stabilization, revealed no midline tenderness.</span>
+        <span class="phrase-ja">右頭頂部に5cmの裂創あり…頸椎カラーを軸方向固定下で外した上で頸部を診察し、正中圧痛と階段変形なし</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The abdomen was distended and diffusely tender, with involuntary guarding. A FAST examination was performed, which revealed free fluid in Morrison pouch and the pelvis.')">&#128264;</button>
+        <span class="phrase-en">The abdomen was distended and diffusely tender, with involuntary guarding. A FAST examination revealed free fluid in [部位].</span>
+        <span class="phrase-ja">腹部は膨満し広範な圧痛と筋性防御あり。FAST検査でモリソン窩と骨盤内に液体貯留を認めた</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>6. Workup（検査・画像所見）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <p>救急での検査の特徴として、<strong>point-of-care検査（FAST、血液ガス等）</strong>が先行し、安定化後に確定的な画像検査を行います。</p>
+    <div class="template-block">
+      <p>"Point-of-care testing revealed <span class="placeholder">[血液ガス、乳酸値、血糖等]</span>."</p>
+      <p>"A FAST examination was <span class="placeholder">[positive / negative / indeterminate]</span> for free intraperitoneal fluid."</p>
+      <p>"Once hemodynamically stable, the patient was taken for computed tomography. CT of the <span class="placeholder">[部位]</span> with intravenous contrast revealed <span class="placeholder">[所見]</span>."</p>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('A venous blood gas showed a pH of 7.18 with a lactate of 6.2 millimoles per liter, consistent with metabolic acidosis likely secondary to tissue hypoperfusion.')">&#128264;</button>
+        <span class="phrase-en">A venous blood gas showed a pH of 7.18 with a lactate of 6.2 mmol/L, consistent with metabolic acidosis likely secondary to tissue hypoperfusion.</span>
+        <span class="phrase-ja">静脈血ガスでpH 7.18、乳酸値6.2 mmol/L、組織低灌流による代謝性アシドーシスに合致する</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('A point-of-care hemoglobin was 7.2 grams per deciliter. Thromboelastography showed a prolonged R-time, suggesting coagulopathy.')">&#128264;</button>
+        <span class="phrase-en">A point-of-care hemoglobin was [X] g/dL. Thromboelastography showed [所見].</span>
+        <span class="phrase-ja">ポイントオブケアのヘモグロビンは[X] g/dL。TEGで[所見]を認めた</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Once the patient was hemodynamically stable enough for transport, a CT pan-scan was obtained, which revealed a grade 4 splenic laceration with active contrast extravasation, bilateral pulmonary contusions, and fractures of the left 4th through 8th ribs.')">&#128264;</button>
+        <span class="phrase-en">Once hemodynamically stable enough for transport, a CT pan-scan was obtained, which revealed [所見].</span>
+        <span class="phrase-ja">搬送可能な循環動態に安定化後、全身CTを撮影し[所見]を認めた</span>
+      </li>
+    </ul>
+    <div class="tip">
+      <strong>救急医としての視点：</strong>「<strong>Once hemodynamically stable enough for transport</strong>」という表現は、不安定な患者をCT室に安易に搬送しなかったという臨床判断を示す重要なフレーズです。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>7. Clinical Course &amp; Disposition（臨床経過と転帰）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <div class="template-block">
+      <p>"Based on these findings, <span class="placeholder">[科]</span> was consulted and the patient was taken to the <span class="placeholder">[operating room / interventional radiology suite / intensive care unit]</span> for <span class="placeholder">[処置・治療]</span>."</p>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Based on these findings, trauma surgery was consulted. The patient was taken emergently to the operating room for an exploratory laparotomy, which revealed a grade 4 splenic laceration requiring splenectomy.')">&#128264;</button>
+        <span class="phrase-en">Based on these findings, [科] was consulted. The patient was taken emergently to the operating room for [手術].</span>
+        <span class="phrase-ja">これらの所見に基づき[科]にコンサルトし、[手術]目的に緊急手術室へ搬送した</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The patient was admitted to the surgical intensive care unit for ongoing resuscitation and close hemodynamic monitoring.')">&#128264;</button>
+        <span class="phrase-en">The patient was admitted to the [ICU] for ongoing resuscitation and close hemodynamic monitoring.</span>
+        <span class="phrase-ja">[ICU]に入室し、継続的な蘇生と循環動態の厳重なモニタリングを行った</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>8. Summary（要約）</h3>
+      <span class="badge badge-required">必須</span>
+    </div>
+    <p>救急医の要約では、<strong>生理学的異常・行った蘇生・鑑別診断</strong>を含めます。</p>
+    <div class="template-block">
+      <p>"In summary, this is a <span class="placeholder">[年齢]</span>-year-old <span class="placeholder">[man/woman]</span> who <span class="placeholder">[受傷機転/発症状況]</span> and presented in <span class="placeholder">[安定性]</span> condition. The primary survey was notable for <span class="placeholder">[ABCDEの主要異常]</span>. Initial resuscitation included <span class="placeholder">[蘇生内容]</span>, with <span class="placeholder">[反応]</span>. Workup revealed <span class="placeholder">[主要所見]</span>, most consistent with <span class="placeholder">[診断/鑑別]</span>."</p>
+    </div>
+  </div>
+
+  <!-- 練習症例 -->
+  <div class="card">
+    <h3>練習症例：救急医の症例提示</h3>
+    <p style="margin-bottom:1rem; color:var(--text-secondary);">日本語の症例情報を読み、救急医のテンプレートに沿って英語でプレゼンテーションを書いてください。</p>
+    <div class="case-selector" id="emCaseSelector"></div>
+    <div id="emPracticeContent"></div>
+  </div>
+</div>
+
+<!-- ==================== 重要フレーズ ==================== -->
+<div id="phrases" class="section">
+  <h2>セクション別 重要フレーズ集</h2>
+  <p style="margin-bottom:1rem; color: var(--text-secondary);">スピーカーボタンで英語の音声を再生できます。繰り返し聞いて発音を身につけましょう。</p>
+
+  <div class="card">
+    <h3>Opening Statement（冒頭の一文）</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('A 45-year-old woman presented to the emergency department')">&#128264;</button>
+        <span class="phrase-en">A 45-year-old woman presented to the emergency department with...</span>
+        <span class="phrase-ja">45歳女性が救急外来を受診した</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('with a history of hypertension and type 2 diabetes')">&#128264;</button>
+        <span class="phrase-en">...with a history of hypertension and type 2 diabetes</span>
+        <span class="phrase-ja">高血圧と2型糖尿病の既往があり</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('with no significant past medical history')">&#128264;</button>
+        <span class="phrase-en">...with no significant past medical history</span>
+        <span class="phrase-ja">特記すべき既往歴なし</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('of three days duration')">&#128264;</button>
+        <span class="phrase-en">...of [three days'] duration</span>
+        <span class="phrase-ja">3日間持続する</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('was brought to the emergency department by emergency medical services')">&#128264;</button>
+        <span class="phrase-en">...was brought to the emergency department by emergency medical services</span>
+        <span class="phrase-ja">救急搬送された</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>History of Present Illness（現病歴）</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('The patient was in their usual state of health until two days before admission')">&#128264;</button>
+        <span class="phrase-en">The patient was in their usual state of health until [X] before admission</span>
+        <span class="phrase-ja">入院の[X]前まで普段の健康状態であった</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('when they developed acute onset chest pain')">&#128264;</button>
+        <span class="phrase-en">...when they developed [acute-onset / gradual-onset] [symptom]</span>
+        <span class="phrase-ja">急性発症/緩徐発症の[症状]が出現した</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The pain was described as sharp and stabbing')">&#128264;</button>
+        <span class="phrase-en">The pain was described as [sharp / dull / stabbing / pressure-like / burning]</span>
+        <span class="phrase-ja">鋭い/鈍い/刺すような/圧迫感のある/灼熱感のある痛み</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The pain was rated 8 out of 10 in severity')">&#128264;</button>
+        <span class="phrase-en">The pain was rated [X] out of 10 in severity</span>
+        <span class="phrase-ja">NRS 10段階で[X]の痛み</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('radiating to the left arm and jaw')">&#128264;</button>
+        <span class="phrase-en">...radiating to the [left arm / jaw / back]</span>
+        <span class="phrase-ja">[左腕/顎/背部]に放散する</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Associated symptoms included nausea, vomiting, and diaphoresis')">&#128264;</button>
+        <span class="phrase-en">Associated symptoms included [nausea / vomiting / diaphoresis]</span>
+        <span class="phrase-ja">随伴症状：[悪心/嘔吐/発汗]</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The patient denied fever, chills, and weight loss')">&#128264;</button>
+        <span class="phrase-en">The patient denied [fever / chills / weight loss]</span>
+        <span class="phrase-ja">[発熱/悪寒/体重減少]は否定した</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The symptoms were exacerbated by exertion and alleviated by rest')">&#128264;</button>
+        <span class="phrase-en">The symptoms were exacerbated by [X] and alleviated by [Y]</span>
+        <span class="phrase-ja">[X]で増悪し[Y]で軽減した</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('They were evaluated at an outside hospital where a CT scan was obtained')">&#128264;</button>
+        <span class="phrase-en">They were evaluated at an outside hospital, where [workup] was obtained</span>
+        <span class="phrase-ja">前医で[検査]が施行された</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Past Medical History &amp; Medications（既往歴・常用薬）</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('The past medical history was notable for coronary artery disease and chronic kidney disease')">&#128264;</button>
+        <span class="phrase-en">The past medical history was notable for [conditions]</span>
+        <span class="phrase-ja">既往歴として[疾患]が認められた</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Past surgical history included appendectomy at age 20')">&#128264;</button>
+        <span class="phrase-en">Past surgical history included [surgery] at age [X]</span>
+        <span class="phrase-ja">[X]歳時に[手術]の既往あり</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Home medications included metformin 500 milligrams twice daily')">&#128264;</button>
+        <span class="phrase-en">Home medications included [drug] [dose] [frequency]</span>
+        <span class="phrase-ja">常用薬：[薬剤名][用量][頻度]</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The patient had no known drug allergies')">&#128264;</button>
+        <span class="phrase-en">The patient had no known drug allergies (NKDA)</span>
+        <span class="phrase-ja">薬剤アレルギーなし</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Physical Examination（身体所見）</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('On examination, the patient appeared acutely ill and was in moderate distress')">&#128264;</button>
+        <span class="phrase-en">On examination, the patient appeared [well / acutely ill / in moderate distress]</span>
+        <span class="phrase-ja">診察上、[良好/急性病態/中等度の苦痛]の状態</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The vital signs were as follows: temperature 38.5 degrees Celsius, heart rate 110 beats per minute, blood pressure 90 over 60 millimeters of mercury')">&#128264;</button>
+        <span class="phrase-en">The vital signs were as follows: temperature [X]&deg;C, heart rate [X] beats per minute, blood pressure [X/X] mm Hg</span>
+        <span class="phrase-ja">バイタルサイン：体温[X]℃、心拍数[X]回/分、血圧[X/X] mmHg</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('oxygen saturation 94 percent while breathing room air')">&#128264;</button>
+        <span class="phrase-en">...oxygen saturation [X]% while breathing [room air / supplemental oxygen]</span>
+        <span class="phrase-ja">酸素飽和度[X]%（室内気/酸素投与下）</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The lungs were clear to auscultation bilaterally')">&#128264;</button>
+        <span class="phrase-en">The lungs were clear to auscultation bilaterally</span>
+        <span class="phrase-ja">両側肺野は聴診上清明</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The abdomen was soft, nontender, and nondistended')">&#128264;</button>
+        <span class="phrase-en">The abdomen was soft, nontender, and nondistended</span>
+        <span class="phrase-ja">腹部は軟、圧痛なし、膨満なし</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('There was pitting edema of the bilateral lower extremities')">&#128264;</button>
+        <span class="phrase-en">There was [pitting / nonpitting] edema of the bilateral lower extremities</span>
+        <span class="phrase-ja">両側下肢に[圧痕性/非圧痕性]浮腫あり</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('No jugular venous distention was noted')">&#128264;</button>
+        <span class="phrase-en">No jugular venous distention was noted</span>
+        <span class="phrase-ja">頸静脈怒張なし</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('A systolic murmur was heard best at the apex')">&#128264;</button>
+        <span class="phrase-en">A [systolic / diastolic] murmur was heard best at the [apex / base]</span>
+        <span class="phrase-ja">[心尖部/心基部]で[収縮期/拡張期]雑音を聴取</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Laboratory &amp; Imaging（検査・画像所見）</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Laboratory studies revealed a white blood cell count of 15,000 per microliter')">&#128264;</button>
+        <span class="phrase-en">Laboratory studies revealed a white-cell count of [X] per microliter</span>
+        <span class="phrase-ja">白血球数 [X]/&mu;L</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The basic metabolic panel was notable for a creatinine level of 2.5 milligrams per deciliter')">&#128264;</button>
+        <span class="phrase-en">The basic metabolic panel was notable for a creatinine of [X] mg/dL</span>
+        <span class="phrase-ja">生化学検査でクレアチニン [X] mg/dL</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('A chest radiograph showed bilateral pleural effusions')">&#128264;</button>
+        <span class="phrase-en">A chest radiograph showed [findings]</span>
+        <span class="phrase-ja">胸部X線で[所見]を認めた</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Computed tomography of the abdomen and pelvis with intravenous contrast revealed a 5 centimeter mass')">&#128264;</button>
+        <span class="phrase-en">Computed tomography (CT) of the [body part], performed with IV contrast, revealed [findings]</span>
+        <span class="phrase-ja">[部位]の造影CTで[所見]を認めた</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('An electrocardiogram showed sinus tachycardia with ST-segment elevation in leads V1 through V4')">&#128264;</button>
+        <span class="phrase-en">An electrocardiogram (ECG) showed [rhythm] with [findings]</span>
+        <span class="phrase-ja">心電図で[調律]、[所見]を認めた</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Summary &amp; Differential（要約・鑑別診断）</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('In summary, this is a 65-year-old man with hypertension who presented with acute chest pain and was found to have ST elevation')">&#128264;</button>
+        <span class="phrase-en">In summary, this is a [age]-year-old [sex] with [PMH] who presented with [symptoms] and was found to have [findings]</span>
+        <span class="phrase-ja">要約：[既往]のある[年齢]歳[性別]が[症状]で受診し[所見]を認めた</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The differential diagnosis includes acute coronary syndrome, pulmonary embolism, and aortic dissection')">&#128264;</button>
+        <span class="phrase-en">The differential diagnosis includes [diagnosis 1], [diagnosis 2], and [diagnosis 3]</span>
+        <span class="phrase-ja">鑑別診断：[診断1]、[診断2]、[診断3]</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The most likely diagnosis is acute myocardial infarction given the clinical presentation and ECG findings')">&#128264;</button>
+        <span class="phrase-en">The most likely diagnosis is [X], given the clinical presentation and [key finding]</span>
+        <span class="phrase-ja">臨床像と[所見]から最も考えられる診断は[X]</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== 練習問題 ==================== -->
+<div id="practice" class="section">
+  <h2>練習問題</h2>
+  <p style="margin-bottom:1rem; color: var(--text-secondary);">日本語の症例情報を読み、各セクションを英語で記述してください。「模範解答を見る」で NEJM スタイルの解答を確認できます。</p>
+
+  <div class="case-selector" id="caseSelector"></div>
+  <div id="practiceContent"></div>
+</div>
+
+<!-- ==================== 確認テスト ==================== -->
+<div id="quiz" class="section">
+  <h2>確認テスト</h2>
+  <p style="margin-bottom:1rem; color: var(--text-secondary);">NEJM形式の表現ルールに関するクイズです。正しい選択肢をクリックしてください。</p>
+  <div class="score-display">
+    <div>正解数</div>
+    <div class="score-number" id="quizScore">0 / 0</div>
+    <div class="progress-bar"><div class="progress-fill" id="quizProgress" style="width:0%"></div></div>
+  </div>
+  <div id="quizContent"></div>
+  <div class="btn-group" style="justify-content:center; margin-top:1.5rem;">
+    <button class="btn btn-primary" onclick="resetQuiz()">テストをリセット</button>
+  </div>
+</div>
+
+<!-- ==================== 自己評価 ==================== -->
+<div id="checklist" class="section">
+  <h2>自己評価チェックリスト</h2>
+  <p style="margin-bottom:1rem; color: var(--text-secondary);">症例プレゼンテーションのスキルを自己評価してください。習得できた項目にチェックを入れましょう。（進捗はブラウザに保存されます）</p>
+  <div class="progress-bar"><div class="progress-fill" id="checklistProgress" style="width:0%"></div></div>
+  <p id="checklistCount" style="text-align:center; margin-bottom:1rem; font-size:0.9rem; color: var(--text-secondary);">0 / 0 達成</p>
+
+  <div class="card">
+    <h3>構成（Structure）</h3>
+    <ul class="checklist" id="checklistStructure"></ul>
+  </div>
+  <div class="card">
+    <h3>表現・語法（Language &amp; Style）</h3>
+    <ul class="checklist" id="checklistLanguage"></ul>
+  </div>
+  <div class="card">
+    <h3>プレゼンの実施（Delivery）</h3>
+    <ul class="checklist" id="checklistDelivery"></ul>
+  </div>
+</div>
+
+<!-- ==================== 座長英語 ==================== -->
+<div id="chair" class="section">
+  <h2>国際学会 座長のための学術英語</h2>
+  <p style="margin-bottom:1rem; color: var(--text-secondary);">国際学会でセッションの座長（Chair / Moderator）を務める際に必要な英語表現を、場面別に整理しました。スピーカーボタンで音声を確認できます。</p>
+
+  <!-- 座長の役割 概要 -->
+  <div class="card">
+    <h3>座長の主な役割と流れ</h3>
+    <ol style="margin: 0.5rem 0 0 1.5rem;">
+      <li><strong>セッションの開会</strong> ― 自己紹介、セッションのテーマ紹介</li>
+      <li><strong>演者の紹介</strong> ― 各演者の所属・演題を紹介</li>
+      <li><strong>タイムキーピング</strong> ― 残り時間の通知、時間超過への対応</li>
+      <li><strong>質疑応答の進行</strong> ― 質問者の指名、質問の整理、議論の促進</li>
+      <li><strong>トラブル対応</strong> ― 機器トラブル、質問が出ない場合の対処</li>
+      <li><strong>セッションの閉会</strong> ― 演者への謝辞、次のセッションへの案内</li>
+    </ol>
+    <div class="tip">
+      <strong>心構え：</strong>座長は「進行役」であり主役ではありません。演者と聴衆が円滑にコミュニケーションできるよう、簡潔・明瞭な英語で進行しましょう。
+    </div>
+  </div>
+
+  <!-- 1. セッション開会 -->
+  <div class="card">
+    <div class="card-header">
+      <h3>1. セッションの開会（Opening the Session）</h3>
+    </div>
+    <p>セッション開始時に、自己紹介とセッションの概要を述べます。</p>
+
+    <h3 style="font-size:1rem; color:var(--accent);">自己紹介</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Good morning, everyone. Welcome to this session on emergency cardiac care.')">&#128264;</button>
+        <span class="phrase-en">Good morning, everyone. Welcome to this session on [テーマ].</span>
+        <span class="phrase-ja">皆さん、おはようございます。[テーマ]のセッションへようこそ。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('My name is Tanaka from the Department of Emergency Medicine at Tokyo University Hospital. I will be chairing this session.')">&#128264;</button>
+        <span class="phrase-en">My name is [名前] from the Department of [科名] at [施設名]. I will be chairing this session.</span>
+        <span class="phrase-ja">[施設名] [科名]の[名前]です。本セッションの座長を務めます。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('I am pleased to co-chair this session with Dr. Smith from Johns Hopkins University.')">&#128264;</button>
+        <span class="phrase-en">I am pleased to co-chair this session with Dr. [名前] from [施設名].</span>
+        <span class="phrase-ja">[施設名]の[名前]先生と共同で座長を務めます。</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--accent);">セッション概要の紹介</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('In this session, we will have four presentations focusing on recent advances in sepsis management.')">&#128264;</button>
+        <span class="phrase-en">In this session, we will have [数] presentations focusing on [テーマ].</span>
+        <span class="phrase-ja">本セッションでは、[テーマ]に関する[数]題の発表があります。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Each speaker will have 12 minutes for their presentation, followed by 3 minutes for questions and discussion.')">&#128264;</button>
+        <span class="phrase-en">Each speaker will have [X] minutes for their presentation, followed by [Y] minutes for questions and discussion.</span>
+        <span class="phrase-ja">各演者の発表時間は[X]分、質疑応答は[Y]分です。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Please hold your questions until the end of each presentation.')">&#128264;</button>
+        <span class="phrase-en">Please hold your questions until the end of each presentation.</span>
+        <span class="phrase-ja">ご質問は各発表の後にお願いいたします。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('We will also have a general discussion at the end of the session, so please save any broader questions for that time.')">&#128264;</button>
+        <span class="phrase-en">We will also have a general discussion at the end of the session, so please save any broader questions for that time.</span>
+        <span class="phrase-ja">セッション最後に総合討論の時間がありますので、広いテーマの質問はその際にお願いします。</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--accent);">運営上の注意事項</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Before we begin, I would like to remind everyone to please silence your mobile phones.')">&#128264;</button>
+        <span class="phrase-en">Before we begin, I would like to remind everyone to please silence your mobile phones.</span>
+        <span class="phrase-ja">開始前に、携帯電話をマナーモードにしていただくようお願いいたします。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('For those who wish to ask questions, please use the microphone at the front of the room and state your name and affiliation.')">&#128264;</button>
+        <span class="phrase-en">For those who wish to ask questions, please use the microphone and state your name and affiliation.</span>
+        <span class="phrase-ja">質問される方は、マイクをお使いいただき、お名前とご所属をお伝えください。</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 2. 演者紹介 -->
+  <div class="card">
+    <div class="card-header">
+      <h3>2. 演者の紹介（Introducing Speakers）</h3>
+    </div>
+    <p>演者の氏名、所属、演題を簡潔に紹介します。長い経歴紹介は不要です。</p>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Let us now move on to the first presentation. Our first speaker is Dr. Suzuki from Osaka University. The title of the presentation is Early Goal-Directed Therapy in Septic Shock. Dr. Suzuki, please go ahead.')">&#128264;</button>
+        <span class="phrase-en">Our first speaker is Dr. [名前] from [施設名]. The title of the presentation is "[演題]." Dr. [名前], please go ahead.</span>
+        <span class="phrase-ja">最初の演者は[施設名]の[名前]先生です。演題は「[演題]」です。[名前]先生、よろしくお願いします。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The next presentation will be given by Dr. Kim from Seoul National University, who will talk about point-of-care ultrasound in the emergency department.')">&#128264;</button>
+        <span class="phrase-en">The next presentation will be given by Dr. [名前] from [施設名], who will talk about [テーマ].</span>
+        <span class="phrase-ja">次の発表は[施設名]の[名前]先生で、[テーマ]についてお話しいただきます。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Our final speaker today is Dr. Johnson, who is a professor of emergency medicine at Harvard Medical School.')">&#128264;</button>
+        <span class="phrase-en">Our final speaker today is Dr. [名前], who is [役職] at [施設名].</span>
+        <span class="phrase-ja">本日最後の演者は[施設名]の[役職]、[名前]先生です。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Dr. Suzuki is well known for his pioneering work in resuscitation science.')">&#128264;</button>
+        <span class="phrase-en">Dr. [名前] is well known for [his/her/their] [pioneering / extensive] work in [分野].</span>
+        <span class="phrase-ja">[名前]先生は[分野]における先駆的な/豊富な研究で知られています。</span>
+      </li>
+    </ul>
+    <div class="note-ja">
+      <strong>紹介のコツ：</strong>演者紹介は<strong>30秒以内</strong>を目安に。長々と経歴を読み上げるのは国際学会では一般的ではありません。氏名・所属・演題の3点を明確に述べましょう。
+    </div>
+  </div>
+
+  <!-- 3. タイムキーピング -->
+  <div class="card">
+    <div class="card-header">
+      <h3>3. タイムキーピング（Time Management）</h3>
+    </div>
+    <p>座長の最も重要な責務の一つです。時間を守ることで、後の演者やセッション全体への影響を防ぎます。</p>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Dr. Suzuki, you have two minutes remaining.')">&#128264;</button>
+        <span class="phrase-en">Dr. [名前], you have [X] minutes remaining.</span>
+        <span class="phrase-ja">[名前]先生、残り[X]分です。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('I am sorry to interrupt, but we are running short on time. Could you please summarize your remaining points?')">&#128264;</button>
+        <span class="phrase-en">I am sorry to interrupt, but we are running short on time. Could you please summarize your remaining points?</span>
+        <span class="phrase-ja">恐れ入りますが、お時間が少なくなっております。残りのポイントをまとめていただけますか？</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('I am afraid we need to move on to the next presentation. Thank you, Dr. Suzuki.')">&#128264;</button>
+        <span class="phrase-en">I am afraid we need to move on to the next presentation. Thank you, Dr. [名前].</span>
+        <span class="phrase-ja">申し訳ありませんが、次の発表に移らせていただきます。[名前]先生、ありがとうございました。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('We are slightly behind schedule, so I would ask the remaining speakers to please keep to the allotted time.')">&#128264;</button>
+        <span class="phrase-en">We are slightly behind schedule, so I would ask the remaining speakers to please keep to the allotted time.</span>
+        <span class="phrase-ja">やや時間が押しておりますので、残りの演者の先生方は持ち時間の厳守をお願いいたします。</span>
+      </li>
+    </ul>
+    <div class="tip">
+      <strong>ポイント：</strong>時間超過を伝える際は、<strong>"I am sorry to interrupt, but..."</strong> や <strong>"I am afraid..."</strong> で丁寧に切り出します。直接的に "Stop" や "Your time is up" とは言いません。
+    </div>
+  </div>
+
+  <!-- 4. 質疑応答の進行 -->
+  <div class="card">
+    <div class="card-header">
+      <h3>4. 質疑応答の進行（Managing Q&amp;A）</h3>
+    </div>
+    <p>質疑応答は座長の腕の見せどころです。質問者の指名、質問の整理、議論の活性化を行います。</p>
+
+    <h3 style="font-size:1rem; color:var(--accent);">質疑応答の開始</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Thank you, Dr. Suzuki, for that excellent presentation. We now have a few minutes for questions and discussion. Are there any questions from the audience?')">&#128264;</button>
+        <span class="phrase-en">Thank you, Dr. [名前], for that excellent presentation. We now have a few minutes for questions. Are there any questions from the audience?</span>
+        <span class="phrase-ja">[名前]先生、素晴らしいご発表ありがとうございました。質疑応答の時間です。会場からご質問はございますか？</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Thank you for that very informative talk. The floor is now open for questions.')">&#128264;</button>
+        <span class="phrase-en">Thank you for that very informative talk. The floor is now open for questions.</span>
+        <span class="phrase-ja">大変有益なご発表ありがとうございました。質問を受け付けます。</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--accent);">質問者の指名</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Yes, the gentleman in the third row, please.')">&#128264;</button>
+        <span class="phrase-en">Yes, the [gentleman / lady] in the [third] row, please.</span>
+        <span class="phrase-ja">[3]列目の方、どうぞ。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Please state your name and affiliation before your question.')">&#128264;</button>
+        <span class="phrase-en">Please state your name and affiliation before your question.</span>
+        <span class="phrase-ja">ご質問の前に、お名前とご所属をお願いします。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('We have time for one more question.')">&#128264;</button>
+        <span class="phrase-en">We have time for one more question.</span>
+        <span class="phrase-ja">あと1問、質問をお受けできます。</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--accent);">質問の整理・補足</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('That is a very good question. If I understand correctly, you are asking about the inclusion criteria for the study. Is that correct?')">&#128264;</button>
+        <span class="phrase-en">That is a very good question. If I understand correctly, you are asking about [要点]. Is that correct?</span>
+        <span class="phrase-ja">とても良いご質問です。確認ですが、[要点]についてのご質問でしょうか？</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Could you please repeat your question for the benefit of the audience?')">&#128264;</button>
+        <span class="phrase-en">Could you please repeat your question for the benefit of the audience?</span>
+        <span class="phrase-ja">会場の皆さんのために、もう一度ご質問をお願いできますか？</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Allow me to rephrase the question. The question is whether the same protocol can be applied to pediatric patients.')">&#128264;</button>
+        <span class="phrase-en">Allow me to rephrase the question. The question is whether [要点].</span>
+        <span class="phrase-ja">質問を言い換えさせてください。[要点]というご質問です。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('That is actually two questions. Let us address them one at a time. Dr. Suzuki, could you first respond to the question about sample size?')">&#128264;</button>
+        <span class="phrase-en">That is actually two questions. Let us address them one at a time.</span>
+        <span class="phrase-ja">実はそれは2つの質問ですね。1つずつお答えいただきましょう。</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--accent);">議論の活性化（質問が出ない場合）</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('While we wait for questions from the audience, I have a question for you. Could you elaborate on the clinical implications of your findings?')">&#128264;</button>
+        <span class="phrase-en">While we wait for questions, I have a question myself. Could you elaborate on [ポイント]?</span>
+        <span class="phrase-ja">会場からの質問を待つ間に、私から一つ。[ポイント]についてもう少し詳しくお聞かせいただけますか？</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('I would like to ask about the generalizability of your results. Do you think this approach would work in a resource-limited setting?')">&#128264;</button>
+        <span class="phrase-en">I would like to ask about the generalizability of your results. Do you think this approach would work in [状況]?</span>
+        <span class="phrase-ja">結果の一般化可能性についてお伺いします。[状況]でもこのアプローチは有効でしょうか？</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('What do you see as the next step in this line of research?')">&#128264;</button>
+        <span class="phrase-en">What do you see as the next step in this line of research?</span>
+        <span class="phrase-ja">この研究の次のステップはどうお考えですか？</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('This is a very relevant topic for emergency physicians. How might these findings change our clinical practice?')">&#128264;</button>
+        <span class="phrase-en">This is a very relevant topic for [対象]. How might these findings change our clinical practice?</span>
+        <span class="phrase-ja">これは[対象]にとって非常に重要なテーマです。これらの知見は臨床実践をどう変えうるでしょうか？</span>
+      </li>
+    </ul>
+    <div class="note-ja">
+      <strong>座長としての準備：</strong>質問が出ない場合に備え、各演題について<strong>2〜3個の質問</strong>を事前に準備しておくのが鉄則です。特に「臨床的意義」「限界と今後の展望」「他施設への応用」は汎用的な質問テーマです。
+    </div>
+  </div>
+
+  <!-- 5. 議論の深化・コメント -->
+  <div class="card">
+    <div class="card-header">
+      <h3>5. 議論の深化とコメント（Facilitating Discussion）</h3>
+    </div>
+    <p>質問と回答のやり取りをさらに掘り下げたり、他の聴衆の意見を引き出したりする表現です。</p>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Thank you for that response. Does anyone else have a comment on this topic?')">&#128264;</button>
+        <span class="phrase-en">Thank you for that response. Does anyone else have a comment on this topic?</span>
+        <span class="phrase-ja">ご回答ありがとうございます。この点について、他にご意見はありますか？</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('That is an interesting point. I think this also relates to the earlier presentation by Dr. Kim.')">&#128264;</button>
+        <span class="phrase-en">That is an interesting point. I think this also relates to the earlier presentation by Dr. [名前].</span>
+        <span class="phrase-ja">興味深いご指摘です。先ほどの[名前]先生のご発表とも関連しますね。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Perhaps Dr. Kim could also comment on this, given your experience with a similar patient population.')">&#128264;</button>
+        <span class="phrase-en">Perhaps Dr. [名前] could also comment on this, given [his/her/their] experience with [関連テーマ].</span>
+        <span class="phrase-ja">[関連テーマ]のご経験をお持ちの[名前]先生にもコメントいただけますか。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('This is clearly an area where more research is needed. Thank you for raising that important point.')">&#128264;</button>
+        <span class="phrase-en">This is clearly an area where more research is needed. Thank you for raising that important point.</span>
+        <span class="phrase-ja">これは明らかにさらなる研究が必要な領域ですね。重要なご指摘ありがとうございます。</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 6. トラブル対応 -->
+  <div class="card">
+    <div class="card-header">
+      <h3>6. トラブル対応（Handling Difficulties）</h3>
+    </div>
+
+    <h3 style="font-size:1rem; color:var(--accent);">機器トラブル</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('We seem to be having some technical difficulties. Let us take a brief moment while the technician resolves the issue.')">&#128264;</button>
+        <span class="phrase-en">We seem to be having some technical difficulties. Let us take a brief moment while the issue is resolved.</span>
+        <span class="phrase-ja">技術的なトラブルが発生しているようです。復旧まで少々お待ちください。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('While we wait for the slides to come up, Dr. Suzuki, could you perhaps begin with a verbal overview?')">&#128264;</button>
+        <span class="phrase-en">While we wait for the slides to come up, Dr. [名前], could you perhaps begin with a verbal overview?</span>
+        <span class="phrase-ja">スライドの準備を待つ間、[名前]先生、口頭で概要をお話しいただけますか？</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--accent);">演者の不在・遅延</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Unfortunately, Dr. Johnson is unable to join us today. We will proceed with the remaining presentations.')">&#128264;</button>
+        <span class="phrase-en">Unfortunately, Dr. [名前] is unable to join us today. We will proceed with the remaining presentations.</span>
+        <span class="phrase-ja">残念ながら[名前]先生は本日ご出席いただけません。残りの発表で進行いたします。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('With your permission, I would like to change the order of presentations. We will hear from Dr. Kim first.')">&#128264;</button>
+        <span class="phrase-en">With your permission, I would like to change the order of presentations.</span>
+        <span class="phrase-ja">発表の順番を変更させていただきたいと思います。</span>
+      </li>
+    </ul>
+
+    <h3 style="font-size:1rem; color:var(--accent);">質疑応答での困った場面</h3>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Thank you for that comment. However, in the interest of time, I think it might be best to discuss this further during the coffee break.')">&#128264;</button>
+        <span class="phrase-en">Thank you for that comment. In the interest of time, perhaps this could be discussed further during the break.</span>
+        <span class="phrase-ja">コメントありがとうございます。時間の都合上、続きは休憩時間にお話しいただければ幸いです。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('That is more of a comment than a question, but thank you for sharing your experience. Dr. Suzuki, would you like to respond briefly?')">&#128264;</button>
+        <span class="phrase-en">That is more of a comment than a question, but thank you for sharing your experience. Dr. [名前], would you like to respond briefly?</span>
+        <span class="phrase-ja">それはご質問というよりコメントですが、ご経験の共有をありがとうございます。[名前]先生、簡潔にお答えいただけますか？</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('I appreciate your enthusiasm, but could you please keep your question brief so that others may also have an opportunity to ask?')">&#128264;</button>
+        <span class="phrase-en">I appreciate your enthusiasm, but could you please keep your question brief so that others may also have an opportunity?</span>
+        <span class="phrase-ja">ご熱意に感謝しますが、他の方にも機会を差し上げたいので、質問を簡潔にお願いできますか？</span>
+      </li>
+    </ul>
+    <div class="tip">
+      <strong>ポイント：</strong>困った場面でも<strong>感謝の表現（Thank you for...）</strong>から入ることで、丁寧さを保ちながら進行をコントロールできます。
+    </div>
+  </div>
+
+  <!-- 7. セッション閉会 -->
+  <div class="card">
+    <div class="card-header">
+      <h3>7. セッションの閉会（Closing the Session）</h3>
+    </div>
+    <ul class="phrase-list">
+      <li>
+        <button class="speak-btn" onclick="speak('Unfortunately, we have run out of time for questions. I would like to thank all four speakers for their outstanding presentations today.')">&#128264;</button>
+        <span class="phrase-en">Unfortunately, we have run out of time for questions. I would like to thank all [数] speakers for their outstanding presentations.</span>
+        <span class="phrase-ja">残念ながら質疑の時間がなくなりました。[数]名の演者の先生方の素晴らしいご発表に感謝いたします。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('Thank you to all the presenters for their excellent work, and to the audience for the stimulating discussion.')">&#128264;</button>
+        <span class="phrase-en">Thank you to all the presenters for their excellent work, and to the audience for the stimulating discussion.</span>
+        <span class="phrase-ja">演者の先生方の優れたご発表と、会場の皆さまの活発なご議論に感謝いたします。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('This session has highlighted the importance of early intervention in sepsis management. I hope these presentations will inspire further research in this field.')">&#128264;</button>
+        <span class="phrase-en">This session has highlighted [要点]. I hope these presentations will inspire further research in this field.</span>
+        <span class="phrase-ja">本セッションでは[要点]が強調されました。今後のさらなる研究の発展を期待します。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('The next session will begin in 15 minutes in this same room. Please join me in thanking our speakers once again.')">&#128264;</button>
+        <span class="phrase-en">The next session will begin in [X] minutes in [場所]. Please join me in thanking our speakers once again.</span>
+        <span class="phrase-ja">次のセッションは[X]分後に[場所]で開始されます。もう一度、演者の先生方に拍手をお願いいたします。</span>
+      </li>
+      <li>
+        <button class="speak-btn" onclick="speak('With that, I would like to close this session. Thank you all for your participation, and enjoy the rest of the conference.')">&#128264;</button>
+        <span class="phrase-en">With that, I would like to close this session. Thank you all for your participation, and enjoy the rest of the conference.</span>
+        <span class="phrase-ja">以上でこのセッションを終了いたします。ご参加ありがとうございました。学会の残りもお楽しみください。</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 8. 座長実践シミュレーション -->
+  <div class="card">
+    <h3>座長シミュレーション練習</h3>
+    <p style="margin-bottom:1rem;">以下の場面設定を読み、座長として英語で発言を書いてみましょう。</p>
+
+    <div id="chairPracticeContent"></div>
+  </div>
+
+  <!-- 9. 座長チェックリスト -->
+  <div class="card">
+    <h3>座長 準備チェックリスト</h3>
+    <p style="margin-bottom:0.8rem; color: var(--text-secondary);">学会当日までに確認しておくべき項目です。</p>
+    <div class="progress-bar"><div class="progress-fill" id="chairCheckProgress" style="width:0%"></div></div>
+    <p id="chairCheckCount" style="text-align:center; margin-bottom:1rem; font-size:0.9rem; color: var(--text-secondary);">0 / 0 達成</p>
+    <ul class="checklist" id="chairChecklist"></ul>
+  </div>
+</div>
+
+</main>
+
+<footer style="max-width:900px; margin:0 auto; padding:1.5rem; font-size:0.8rem; color:#888; line-height:1.7; border-top:1px solid #e0ddd8;">
+  <p><strong>免責事項・帰属表示（Disclaimer &amp; Attribution）</strong></p>
+  <p>本教材は、<em>New England Journal of Medicine</em>（NEJM）の「Case Records of the Massachusetts General Hospital」シリーズの<strong>公開されている構成形式・文体上の慣行</strong>を参考に、教育目的で独自に作成したものです。NEJM に掲載された症例報告の原文を引用・転載したものではなく、掲載されている練習症例は全て架空のものです。</p>
+  <p>本教材は NEJM、Massachusetts General Hospital、Massachusetts Medical Society とは一切関係がなく、これらの組織による承認・推薦を受けたものではありません。</p>
+  <p>ATLS&reg;（Advanced Trauma Life Support）の概念に基づく一次評価（Primary Survey: ABCDE）のアプローチは、American College of Surgeons が開発・普及させた教育フレームワークであり、本教材ではその一般的な概念を参照しています。</p>
+  <p>敗血症管理に関する記述は、Surviving Sepsis Campaign ガイドライン（Evans L, et al. <em>Crit Care Med</em>. 2021;49(11):e1063-e1143）の公開された推奨事項を参考にしています。</p>
+  <p style="margin-top:1.5rem; padding-top:0.8rem; border-top:1px solid #eee; font-size:0.72rem; color:#aaa; text-align:center; line-height:1.8;">
+    Shunichiro Nakao, MD, MSc, PhD<br>
+    Department of Traumatology and Acute Critical Medicine, The University of Osaka<br>
+    本教材の作成にあたり、生成AI（Claude, Anthropic）を活用しました。<br>
+    &copy; 2026 Shunichiro Nakao — <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" style="color:#aaa;">CC BY-NC-SA 4.0</a>
+  </p>
+</footer>
+
+<script>
+// ==================== ナビゲーション ====================
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.section).classList.add('active');
+  });
+});
+
+// ==================== 音声再生 ====================
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US';
+    u.rate = 0.85;
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v => v.lang.startsWith('en') && v.name.includes('Samantha'))
+      || voices.find(v => v.lang === 'en-US')
+      || voices.find(v => v.lang.startsWith('en'));
+    if (preferred) u.voice = preferred;
+    window.speechSynthesis.speak(u);
+  }
+}
+window.speechSynthesis?.getVoices();
+
+// ==================== 練習問題 ====================
+const cases = [
+  {
+    id: 1,
+    title: "症例1：胸痛",
+    sections: [
+      {
+        name: "Opening Statement（冒頭の一文）",
+        infoJa: "62歳男性。高血圧、脂質異常症、2型糖尿病の既往あり。3時間前からの胸痛を主訴に救急外来を受診した。",
+        hint: "年齢・性別・既往歴・主訴・期間を一文にまとめましょう。「presented to the emergency department」を使います。",
+        model: "A 62-year-old man with a history of hypertension, hyperlipidemia, and type 2 diabetes mellitus presented to the emergency department with chest pain of three hours' duration."
+      },
+      {
+        name: "History of Present Illness（現病歴）",
+        infoJa: "来院3時間前、普段の健康状態であったが、階段を登った際に突然の胸骨下の圧迫感が出現。痛みは10段階で8の強さで、左腕と顎に放散した。嘔気と発汗を伴った。安静にしても改善しなかった。息切れ、発熱、咳嗽は否定した。",
+        hint: "「was in his usual state of health until...」で始め、症状をOPQRSTに沿って記述します。随伴症状と陰性所見も忘れずに。",
+        model: "The patient was in his usual state of health until three hours before presentation, when he developed sudden substernal chest pressure while climbing stairs. The pain was rated 8 out of 10 in severity, radiating to the left arm and jaw. Associated symptoms included nausea and diaphoresis. The pain did not improve with rest. The patient denied dyspnea, fever, and cough."
+      },
+      {
+        name: "Physical Examination & Workup（身体所見・検査）",
+        infoJa: "診察上、急性病態の印象。バイタル：体温36.8℃、心拍数102回/分、血圧158/92 mmHg、呼吸数20回/分、SpO2 97%（室内気）。心音整、雑音なし。肺野清明。腹部異常なし。下肢浮腫なし。心電図ではV1-V4でST上昇。トロポニンI 2.5 ng/mL（基準値<0.04）。",
+        hint: "バイタルサインは省略せず全て書き出します。「beats per minute」「mm Hg」など単位も正式に。心電図は「An electrocardiogram showed...」で始めます。",
+        model: "On examination, the patient appeared acutely ill. The vital signs were as follows: temperature 36.8°C, heart rate 102 beats per minute, blood pressure 158 over 92 mm Hg, respiratory rate 20 breaths per minute, and oxygen saturation 97% while breathing room air. Cardiac examination revealed a regular rate and rhythm with no murmurs. The lungs were clear to auscultation bilaterally. The abdomen was soft, nontender, and nondistended. There was no lower-extremity edema. An electrocardiogram showed ST-segment elevation in leads V1 through V4. The troponin I level was 2.5 ng per milliliter (reference value, <0.04)."
+      },
+      {
+        name: "Summary（要約）",
+        infoJa: "要約：高血圧・脂質異常症・糖尿病の既往がある62歳男性が、急性の胸骨下圧迫感と前壁誘導でのST上昇を認めた。ST上昇型心筋梗塞（STEMI）が強く疑われる。",
+        hint: "「In summary, this is a...who presented with...and was found to have...」の型を使い、鑑別診断に繋げます。",
+        model: "In summary, this is a 62-year-old man with cardiovascular risk factors including hypertension, hyperlipidemia, and diabetes mellitus, who presented with acute substernal chest pressure and was found to have ST-segment elevation in the anterior leads, findings highly concerning for ST-elevation myocardial infarction."
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: "症例2：呼吸困難と発熱",
+    sections: [
+      {
+        name: "Opening Statement（冒頭の一文）",
+        infoJa: "78歳女性。COPD（慢性閉塞性肺疾患）とうっ血性心不全の既往あり。2日前からの呼吸困難の増悪と発熱を主訴に救急外来を受診した。",
+        hint: "COPDは「chronic obstructive pulmonary disease」、心不全は「congestive heart failure」です。",
+        model: "A 78-year-old woman with a history of chronic obstructive pulmonary disease and congestive heart failure presented to the emergency department with worsening dyspnea and fever of two days' duration."
+      },
+      {
+        name: "History of Present Illness（現病歴）",
+        infoJa: "来院2日前から湿性咳嗽と黄色膿性痰が出現し、徐々に呼吸困難が増悪した。来院日の朝に38.9℃の発熱を認めた。普段は自宅で2Lの酸素を使用している。食欲低下あり。胸痛、血痰、下肢浮腫の増悪は否定した。常用薬としてチオトロピウム吸入、フロセミド40mg/日、リシノプリル10mg/日を使用中。",
+        hint: "湿性咳嗽は「productive cough」、膿性痰は「purulent sputum」。在宅酸素のベースラインも述べます。",
+        model: "The patient had been in her usual state of health until two days before admission, when she developed a productive cough with yellow purulent sputum, accompanied by progressively worsening dyspnea. On the morning of presentation, her temperature was 38.9°C. She used supplemental oxygen at 2 liters per minute at home at baseline. She reported decreased appetite. She denied chest pain, hemoptysis, and worsening lower-extremity edema. Home medications included inhaled tiotropium, furosemide 40 mg daily, and lisinopril 10 mg daily."
+      },
+      {
+        name: "Physical Examination & Workup（身体所見・検査）",
+        infoJa: "診察上、中等度の呼吸困難あり。バイタル：体温38.7℃、心拍数108回/分、血圧132/78 mmHg、呼吸数28回/分、SpO2 88%（2L酸素投与下）。右下肺野で気管支呼吸音と湿性ラ音を聴取。両側下肢に軽度の圧痕性浮腫あり。検査所見：白血球18,200/μL（好中球85%）、CRP 14.2 mg/dL。胸部X線で右下葉にコンソリデーション。",
+        hint: "呼吸困難は「respiratory distress」、気管支呼吸音は「bronchial breath sounds」、湿性ラ音は「crackles」。",
+        model: "On examination, the patient was in moderate respiratory distress. The vital signs were as follows: temperature 38.7°C, heart rate 108 beats per minute, blood pressure 132 over 78 mm Hg, respiratory rate 28 breaths per minute, and oxygen saturation 88% while breathing 2 liters of supplemental oxygen via nasal cannula. Auscultation of the lungs revealed bronchial breath sounds and crackles in the right lower lobe. There was mild pitting edema of the bilateral lower extremities. Laboratory studies revealed a white-cell count of 18,200 per microliter with 85% neutrophils and a C-reactive protein level of 14.2 mg per deciliter. A chest radiograph showed consolidation in the right lower lobe."
+      },
+      {
+        name: "Summary（要約）",
+        infoJa: "要約：COPD・心不全の既往がある78歳女性が、呼吸困難増悪、発熱、膿性痰を呈し、右下葉のコンソリデーションと白血球増多を認めた。市中肺炎が最も疑われ、COPDの急性増悪も合併の可能性がある。",
+        hint: "「findings are most consistent with...」（所見は〜に最も合致する）を使って鑑別診断を述べます。",
+        model: "In summary, this is a 78-year-old woman with a history of chronic obstructive pulmonary disease and congestive heart failure who presented with worsening dyspnea, fever, and purulent sputum, and was found to have right lower lobe consolidation and leukocytosis. The findings are most consistent with community-acquired pneumonia, possibly complicated by an acute exacerbation of chronic obstructive pulmonary disease."
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "症例3：意識障害",
+    sections: [
+      {
+        name: "Opening Statement（冒頭の一文）",
+        infoJa: "35歳男性。特記すべき既往歴なし。自宅で反応が鈍くなっているところを同居人に発見され、救急搬送された。",
+        hint: "既往なしは「with no significant past medical history」。救急搬送は「was brought to the ED by EMS」。意識障害は「altered mental status」。",
+        model: "A 35-year-old man with no significant past medical history was brought to the emergency department by emergency medical services after being found by his roommate with altered mental status."
+      },
+      {
+        name: "History of Present Illness（現病歴）",
+        infoJa: "同居人によると、患者は前日の夜まで普段通りであった。当日の朝、同居人がリビングで患者がソファに座ったまま反応が鈍い状態で発見した。周囲に空の薬瓶（アセトアミノフェン）が散見された。嘔吐した形跡があった。患者は最近仕事のストレスで気分が落ち込んでいたとのこと。既往歴なし。常用薬なし。アレルギーなし。飲酒は週に数回ビール。違法薬物の使用は不明。",
+        hint: "本人から聴取できない場合は「According to the patient's roommate...」と情報源を明記します。「diminished responsiveness」で反応低下を表現。",
+        model: "According to the patient's roommate, the patient had been in his usual state of health until the previous evening. On the morning of presentation, the roommate found the patient sitting on the couch in the living room with diminished responsiveness. Several empty bottles of acetaminophen were found nearby. There was evidence of vomiting. The roommate reported that the patient had been experiencing depressed mood recently due to work-related stress. The patient had no significant past medical history, took no medications, and had no known drug allergies. He consumed beer several times per week. The use of illicit substances was unknown."
+      },
+      {
+        name: "Physical Examination & Workup（身体所見・検査）",
+        infoJa: "診察上、傾眠傾向で問いかけに対して簡単な単語でのみ反応。バイタル：体温36.4℃、心拍数92回/分、血圧110/68 mmHg、呼吸数18回/分、SpO2 98%（室内気）。瞳孔は両側等大で対光反射あり。腹部はやや圧痛あり、特に右季肋部。黄疸なし。検査所見：AST 4,500 U/L、ALT 5,200 U/L、PT-INR 2.8、総ビリルビン 1.8 mg/dL、クレアチニン 1.6 mg/dL、アセトアミノフェン血中濃度 180 μg/mL。尿中薬物スクリーニングは陰性。",
+        hint: "傾眠は「somnolent」。肝逸脱酵素はAST/ALTの正式名称を初出時に記載。INRは「international normalized ratio」。",
+        model: "On examination, the patient was somnolent, responding to verbal stimuli with single words only. The vital signs were as follows: temperature 36.4°C, heart rate 92 beats per minute, blood pressure 110 over 68 mm Hg, respiratory rate 18 breaths per minute, and oxygen saturation 98% while breathing room air. The pupils were equal and reactive to light bilaterally. The abdomen was mildly tender, particularly in the right upper quadrant. There was no jaundice. Laboratory studies revealed aspartate aminotransferase (AST) of 4,500 units per liter, alanine aminotransferase (ALT) of 5,200 units per liter, an international normalized ratio (INR) of 2.8, a total bilirubin level of 1.8 mg per deciliter, a creatinine level of 1.6 mg per deciliter, and a serum acetaminophen level of 180 micrograms per milliliter. A urine toxicology screen was negative."
+      },
+      {
+        name: "Summary（要約）",
+        infoJa: "要約：特記すべき既往のない35歳男性が、意識障害で搬送された。アセトアミノフェンの空瓶が発見され、血中アセトアミノフェン濃度高値、著明な肝逸脱酵素上昇とINR延長を認めた。アセトアミノフェン中毒による急性肝不全が強く疑われる。",
+        hint: "「findings are highly consistent with...」で最も考えられる診断を述べます。",
+        model: "In summary, this is a 35-year-old man with no significant past medical history who presented with altered mental status. Empty acetaminophen bottles were found at the scene, and laboratory evaluation revealed a markedly elevated serum acetaminophen level, severe transaminase elevation, and coagulopathy. These findings are highly consistent with acute liver failure secondary to acetaminophen overdose."
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: "症例4：腹痛",
+    sections: [
+      {
+        name: "Opening Statement（冒頭の一文）",
+        infoJa: "28歳女性。特記すべき既往歴なし。6時間前からの右下腹部痛を主訴に救急外来を受診した。",
+        hint: "若年女性の右下腹部痛は鑑別が広い疾患です。年齢・性別・既往・主訴・期間を一文にまとめましょう。",
+        model: "A 28-year-old woman with no significant past medical history presented to the emergency department with right lower quadrant abdominal pain of six hours' duration."
+      },
+      {
+        name: "History of Present Illness（現病歴）",
+        infoJa: "来院6時間前、夕食後に心窩部の鈍痛が出現し、徐々に右下腹部に移動した。痛みはNRS 7/10で持続的。嘔気を2回認めたが嘔吐なし。食欲低下あり。排便は昨日あり正常。排尿時痛や血尿は否定。最終月経は2週間前で正常。性的活動歴あり、コンドームを使用している。発熱や悪寒は来院の2時間前から自覚。不正性器出血は否定。",
+        hint: "classic migration（心窩部→右下腹部）を時系列で述べます。若年女性では産婦人科の鑑別のため月経歴と性的活動歴にも言及します。",
+        model: "The patient was in her usual state of health until six hours before presentation, when she developed dull epigastric pain after dinner. The pain gradually migrated to the right lower quadrant over the following hours and became constant, rated 7 out of 10 in severity. She experienced nausea on two occasions but did not vomit. She reported decreased appetite. Her last bowel movement was the day before and was normal. She denied dysuria and hematuria. Her last menstrual period was two weeks prior and was normal. She was sexually active and reported condom use for contraception. She noted the onset of fever and chills approximately two hours before presentation. She denied abnormal vaginal bleeding or discharge."
+      },
+      {
+        name: "Physical Examination & Workup（身体所見・検査）",
+        infoJa: "診察上、やや苦悶様。バイタル：体温38.3℃、心拍数98回/分、血圧118/72 mmHg、呼吸数16回/分、SpO2 99%（室内気）。腹部は平坦・軟で、右下腹部に圧痛と反跳痛あり。McBurney点で最も顕著。Rovsing徴候陽性。腰筋徴候（psoas sign）陽性。腸蠕動音は軽度減弱。婦人科診察では子宮頸部圧痛なし。検査所見：白血球14,800/μL（好中球82%）、CRP 6.8 mg/dL。尿中hCG陰性。尿検査は正常。腹部CT（造影）：腫大した虫垂（径12mm）、虫垂周囲の脂肪織混濁、小量の腹水。虫垂穿孔の所見なし。",
+        hint: "身体所見ではMcBurney点、Rovsing徴候、psoas signなどの特異的所見を記載。若年女性では尿中hCGの確認が重要です。",
+        model: "On examination, the patient appeared mildly uncomfortable. The vital signs were as follows: temperature 38.3°C, heart rate 98 beats per minute, blood pressure 118 over 72 mm Hg, respiratory rate 16 breaths per minute, and oxygen saturation 99% while breathing room air. The abdomen was flat and soft, with tenderness and rebound tenderness in the right lower quadrant, most prominent at McBurney's point. Rovsing's sign was positive. The psoas sign was positive. Bowel sounds were mildly diminished. Pelvic examination revealed no cervical motion tenderness. Laboratory studies revealed a white-cell count of 14,800 per microliter with 82% neutrophils and a C-reactive protein of 6.8 mg per deciliter. A urine pregnancy test was negative. Urinalysis was unremarkable. Computed tomography of the abdomen and pelvis with intravenous contrast revealed a dilated appendix measuring 12 mm in diameter, periappendiceal fat stranding, and a small amount of free fluid. There were no findings suggestive of appendiceal perforation."
+      },
+      {
+        name: "Summary（要約）",
+        infoJa: "要約：特記すべき既往のない28歳女性が、心窩部から右下腹部に移動する腹痛を呈し、発熱、右下腹部の圧痛・反跳痛、白血球増多を認めた。CTで虫垂の腫大と周囲脂肪織混濁を認め、急性虫垂炎の診断で外科にコンサルトした。",
+        hint: "classic presentationのキーワード（migrating pain, McBurney's tenderness, leukocytosis, CT findings）を簡潔に織り込みます。",
+        model: "In summary, this is a 28-year-old woman with no significant past medical history who presented with abdominal pain that migrated from the epigastrium to the right lower quadrant, accompanied by fever, nausea, and anorexia. Examination revealed right lower quadrant tenderness with rebound and a positive Rovsing's sign. Laboratory studies showed leukocytosis, and CT demonstrated a dilated appendix with periappendiceal fat stranding. These findings are consistent with acute appendicitis. General surgery was consulted for operative management."
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: "症例5：脳卒中",
+    sections: [
+      {
+        name: "Opening Statement（冒頭の一文）",
+        infoJa: "71歳男性。心房細動（ワルファリン内服中だが最近の受診歴なし）と高血圧の既往あり。1時間前に突然の右半身脱力と構音障害が出現し、妻が119番通報し救急搬送された。",
+        hint: "脳卒中はtime-critical diseaseです。「突然の発症（sudden onset）」と発症からの時間を必ず明記しましょう。心房細動とワルファリンコントロール不良は心原性脳塞栓のリスク因子です。",
+        model: "A 71-year-old man with a history of atrial fibrillation, for which he was prescribed warfarin but had not had recent follow-up, and hypertension was brought to the emergency department by emergency medical services with sudden-onset right-sided weakness and dysarthria of approximately one hour's duration."
+      },
+      {
+        name: "History of Present Illness（現病歴）",
+        infoJa: "本日14時頃、自宅の居間でテレビを見ていたところ、突然右手に持っていた湯飲みを落とし、直後から右半身が動かなくなった。妻が声をかけたが、ろれつが回らず言葉が不明瞭であった。14時10分に119番通報。救急隊到着時（14時22分）、GCS 13（E4V3M6）、右上下肢の麻痺あり。既往の心房細動にはワルファリンが処方されていたが、数ヶ月前からかかりつけ医を受診しておらず、自己判断で内服を中断していたとのこと。常用薬：ワルファリン（中断中）、アムロジピン5mg/日。アレルギーなし。飲酒は日本酒を1日1合。非喫煙者。",
+        hint: "Last Known Well（最終健常確認時刻）が脳卒中プレゼンの最重要情報です。時刻を正確に。ワルファリンの自己中断は重要な病歴です。",
+        model: "The patient was in his usual state of health and was watching television in his living room at approximately 2:00 PM today, when he suddenly dropped a cup he was holding in his right hand. His wife witnessed the event and immediately noticed that his right arm and leg were weak and his speech was slurred. She called emergency medical services at 2:10 PM. The last known well time was 2:00 PM. On EMS arrival at 2:22 PM, the Glasgow Coma Scale score was 13 (E4V3M6), and he had right-sided hemiparesis. His past medical history was notable for atrial fibrillation, for which warfarin had been prescribed; however, according to his wife, he had not visited his primary care physician for several months and had discontinued warfarin on his own. Home medications included warfarin, which had been discontinued, and amlodipine 5 mg daily. He had no known drug allergies. He consumed one serving of sake daily and did not smoke."
+      },
+      {
+        name: "Physical Examination & Workup（身体所見・検査）",
+        infoJa: "来院時刻14時35分。バイタル：体温36.4℃、心拍数88回/分（不整）、血圧178/102 mmHg、呼吸数16回/分、SpO2 97%（室内気）。意識はJCS I-3相当、GCS 13（E4V3M6）。共同偏視あり（左方を注視）。右の鼻唇溝が浅い。構音障害あり。右上肢MMT 1/5、右下肢MMT 2/5。左側は正常。右Babinski徴候陽性。NIHSS 14点。心音は不整、雑音なし。肺野清明。\n検査所見：PT-INR 1.2（治療域以下）。血糖 142 mg/dL。その他の血液検査に著明な異常なし。頭部CT（単純）：早期虚血変化（左中大脳動脈領域の皮髄境界不明瞭化）。出血なし。CT angiography：左中大脳動脈M1セグメントの閉塞。CT perfusion：左MCA領域にpenumbra（救済可能な領域）あり。",
+        hint: "NIHSSスコアを報告。INRが治療域以下であること（ワルファリン中断の裏付け）。画像はCT→CTA→CTPの順で報告。「penumbra」は血栓回収療法の適応判断に重要です。",
+        model: "The patient arrived at the emergency department at 2:35 PM. The vital signs were as follows: temperature 36.4°C, heart rate 88 beats per minute and irregular, blood pressure 178 over 102 mm Hg, respiratory rate 16 breaths per minute, and oxygen saturation 97% while breathing room air. He was drowsy but arousable, with a Glasgow Coma Scale score of 13 (E4V3M6). Neurological examination revealed a conjugate gaze deviation to the left, right-sided facial droop with flattening of the right nasolabial fold, and dysarthria. Motor examination demonstrated strength of 1 out of 5 in the right upper extremity and 2 out of 5 in the right lower extremity, with normal strength on the left. The right plantar response was extensor. The National Institutes of Health Stroke Scale score was 14. Cardiac examination revealed an irregularly irregular rhythm without murmurs. The lungs were clear to auscultation bilaterally.\n\nLaboratory studies revealed a prothrombin time with an international normalized ratio of 1.2, below the therapeutic range, which was consistent with the reported discontinuation of warfarin. The blood glucose was 142 mg per deciliter. The remainder of the laboratory studies were unremarkable. Non-contrast computed tomography of the head showed early ischemic changes with loss of the gray-white differentiation in the left middle cerebral artery territory, without hemorrhage. CT angiography revealed occlusion of the M1 segment of the left middle cerebral artery. CT perfusion imaging demonstrated a significant penumbra in the left middle cerebral artery territory, suggesting the presence of salvageable tissue."
+      },
+      {
+        name: "Summary（要約）",
+        infoJa: "要約：心房細動（ワルファリン自己中断中、INR 1.2）と高血圧の既往がある71歳男性が、突然発症の右片麻痺と構音障害で搬送された。Last Known Wellは14:00、来院は14:35で発症から35分。NIHSS 14点。頭部CTで出血なし、CTAで左MCA M1閉塞、CT perfusionでpenumbraを確認。発症4.5時間以内であり、tPA静注の適応を確認後に投与を開始するとともに、大血管閉塞に対する機械的血栓回収術の適応として脳神経外科/脳血管内治療科に緊急コンサルトした。",
+        hint: "脳卒中の要約では「時間軸（LKW→来院→治療開始）」と「治療適応の根拠」が最重要です。tPA（alteplase）と血栓回収術（mechanical thrombectomy）の両方に言及します。",
+        model: "In summary, this is a 71-year-old man with atrial fibrillation, for which warfarin had been self-discontinued with a subtherapeutic INR of 1.2, and hypertension, who presented with sudden-onset right hemiparesis and dysarthria. The last known well time was 2:00 PM, and he arrived at the emergency department at 2:35 PM, within 35 minutes of symptom onset. The National Institutes of Health Stroke Scale score was 14. Non-contrast CT showed no hemorrhage, CT angiography revealed left middle cerebral artery M1 occlusion, and CT perfusion demonstrated a significant ischemic penumbra. Given that the patient was within the 4.5-hour window and met criteria, intravenous alteplase was initiated. Additionally, given the large vessel occlusion, neurointerventional services were emergently consulted for consideration of mechanical thrombectomy."
+      }
+    ]
+  }
+];
+
+let currentCase = 0;
+
+function renderCaseSelector() {
+  const el = document.getElementById('caseSelector');
+  el.innerHTML = cases.map((c, i) =>
+    `<button class="${i === currentCase ? 'active' : ''}" onclick="selectCase(${i})">${c.title}</button>`
+  ).join('');
+}
+
+function selectCase(i) {
+  currentCase = i;
+  renderCaseSelector();
+  renderPractice();
+}
+
+function renderPractice() {
+  const c = cases[currentCase];
+  const el = document.getElementById('practiceContent');
+  el.innerHTML = `<div class="practice-case">
+    <div class="practice-case-header">${c.title}</div>
+    <div class="practice-case-body">
+      ${c.sections.map((s, i) => `
+        <h3>${s.name}</h3>
+        <div class="case-info-ja">
+          <strong>【症例情報】</strong><br>${s.infoJa}
+        </div>
+        <div class="tip" style="margin-bottom:0.8rem;">
+          <strong>ヒント：</strong>${s.hint}
+        </div>
+        <textarea class="practice-textarea" id="practice_${currentCase}_${i}" placeholder="ここに英語でプレゼンテーションを書いてください..."></textarea>
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="showModel(${currentCase}, ${i})">模範解答を見る</button>
+          <button class="btn btn-accent" onclick="speakModel(${currentCase}, ${i})">&#128264; 模範解答を聞く</button>
+        </div>
+        <div class="model-answer" id="model_${currentCase}_${i}">
+          <h4>模範解答（NEJM スタイル）</h4>
+          <p>${s.model}</p>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function showModel(c, s) {
+  document.getElementById(`model_${c}_${s}`).classList.toggle('show');
+}
+
+function speakModel(c, s) {
+  speak(cases[c].sections[s].model);
+}
+
+renderCaseSelector();
+renderPractice();
+
+// ==================== 確認テスト ====================
+const quizData = [
+  {
+    q: "NEJM形式の冒頭文（Opening Statement）として正しいのはどれですか？",
+    options: [
+      "\"A 45-year-old female came to the ER with chest pain.\"",
+      "\"A 45-year-old woman presented to the emergency department with chest pain.\"",
+      "\"45 y/o F c/o CP presented to ED.\"",
+      "\"A female patient, 45 years old, visited the emergency room for chest pain.\""
+    ],
+    correct: 1,
+    explanation: "NEJMでは「woman/man」（female/maleではない）、「presented to」（came toではない）、「emergency department」（ERやemergency roomではない）を使います。略語は正式なプレゼンテーションでは使用しません。"
+  },
+  {
+    q: "バイタルサインのNEJM形式として正しいのはどれですか？",
+    options: [
+      "VS: T 38.5, HR 110, BP 90/60, RR 20, SpO2 97%",
+      "Vitals were stable.（バイタルは安定していた）",
+      "The vital signs were as follows: temperature 38.5°C, heart rate 110 beats per minute, blood pressure 90 over 60 mm Hg, respiratory rate 20 breaths per minute, and oxygen saturation 97% while breathing room air.",
+      "T=38.5C, P=110, BP=90/60, R=20, O2Sat=97% on RA"
+    ],
+    correct: 2,
+    explanation: "NEJMではバイタルサインを全て省略せずに記載します。単位も必ず含め（「beats per minute」など）、酸素飽和度には酸素投与条件（「while breathing room air」等）を明記します。"
+  },
+  {
+    q: "現病歴の冒頭として最もNEJM形式に適しているのはどれですか？",
+    options: [
+      "\"The patient got sick suddenly.\"（患者は突然具合が悪くなった）",
+      "\"Symptoms started 2 days ago.\"（症状は2日前に始まった）",
+      "\"The patient was in their usual state of health until two days before admission, when they developed acute-onset chest pain.\"",
+      "\"The pt was well until 2d PTA when they had sudden CP.\""
+    ],
+    correct: 2,
+    explanation: "「The patient was in their usual state of health until [期間] before admission」はNEJMの現病歴の典型的な書き出しです。ベースラインの状態と発症までの時間軸を明確に示します。"
+  },
+  {
+    q: "陰性所見（pertinent negatives）の報告方法として正しいのはどれですか？",
+    options: [
+      "\"No fever, no chills, no weight loss.\"",
+      "\"The patient denied fever, chills, and weight loss.\"",
+      "\"Fever(-), chills(-), weight loss(-)\"",
+      "\"F/C/WL were all negative.\""
+    ],
+    correct: 1,
+    explanation: "「The patient denied [症状]」がNEJMの標準的な陰性所見の表現です。問診で確認し、患者が否定したことを意味する定型表現です。"
+  },
+  {
+    q: "近年のNEJMで採用されている代名詞の使い方はどれですか？",
+    options: [
+      "常に「he」を普遍的代名詞として使う",
+      "症例ごとに「he」と「she」を交互に使う",
+      "性別に関わらず「they/them」を単数代名詞として使う",
+      "代名詞を一切避け、常に「the patient」と言う"
+    ],
+    correct: 2,
+    explanation: "近年のNEJMでは「they/them」を性別中立の単数代名詞として使用する傾向があります。医学出版における言語慣行の変化を反映しています。"
+  },
+  {
+    q: "画像検査の初出時の記述として正しいのはどれですか？",
+    options: [
+      "\"CT showed a mass.\"（CTで腫瘤を認めた）",
+      "\"CAT scan revealed an abnormality.\"",
+      "\"Computed tomography (CT) of the abdomen, performed with intravenous contrast, revealed a 5-cm mass in the right kidney.\"",
+      "\"CT abd/pelvis w/ contrast: 5cm R kidney mass.\""
+    ],
+    correct: 2,
+    explanation: "NEJMでは初出時に(1)正式名称を記載し括弧内に略語を添える、(2)撮影部位を明記、(3)造影の有無を記載、(4)所見をサイズとともに記述します。"
+  },
+  {
+    q: "検査値のNEJM形式として正しいのはどれですか？",
+    options: [
+      "\"WBC 15K, Hgb 10, Plt 200\"",
+      "\"White count was high.\"（白血球は高値だった）",
+      "\"The white-cell count was 15,000 per microliter; the hemoglobin level was 10 g per deciliter.\"",
+      "\"Labs: WBC 15,000/uL, Hb 10 g/dL, Plt 200K/uL\""
+    ],
+    correct: 2,
+    explanation: "NEJMでは検査値の名称を省略せず（WBCではなく「white-cell count」）、単位も正式に（「per microliter」）記載します。"
+  },
+  {
+    q: "常用薬の報告方法として正しいのはどれですか？",
+    options: [
+      "\"Meds: metformin, lisinopril, atorvastatin\"",
+      "\"Home medications included metformin 500 mg twice daily, lisinopril 10 mg daily, and atorvastatin 40 mg daily.\"",
+      "\"Patient takes DM and HTN meds.\"（患者はDMとHTNの薬を服用）",
+      "\"On metformin 500 BID, lisinopril 10 QD, atorvastatin 40 QHS.\""
+    ],
+    correct: 1,
+    explanation: "NEJM形式では薬剤名・用量・頻度を全て記載します。BID、QD、QHSなどの略語は使わず、「twice daily」「daily」「at bedtime」と記述します。"
+  },
+  {
+    q: "要約文（Summary Statement）の目的として最も適切なのはどれですか？",
+    options: [
+      "プレゼンテーションの全内容を繰り返す",
+      "最終診断を確定的に述べる",
+      "症例の要点を簡潔にまとめ、鑑別診断へのフレームを提示する",
+      "今後必要な検査を列挙する"
+    ],
+    correct: 2,
+    explanation: "要約文は症例の本質的な要素（患者背景、主要症状、重要所見）を凝縮し、鑑別診断の議論へ橋渡しする役割があります。全てを繰り返すのではなく、診断推論に重要な情報のみを抽出します。"
+  },
+  {
+    q: "正常な肺の身体所見として、NEJM形式で正しい表現はどれですか？",
+    options: [
+      "\"Lungs CTA bilaterally\"",
+      "\"The lungs were clear to auscultation bilaterally.\"",
+      "\"Chest clear.\"（胸部清明）",
+      "\"Lung exam was normal.\"（肺の診察は正常）"
+    ],
+    correct: 1,
+    explanation: "「The lungs were clear to auscultation bilaterally.」がNEJMの標準的な表現です。略語（CTA）は使わず、完全な文で記述します。"
+  }
+];
+
+let quizAnswered = 0;
+let quizCorrect = 0;
+
+function renderQuiz() {
+  const el = document.getElementById('quizContent');
+  el.innerHTML = quizData.map((q, i) => `
+    <div class="quiz-question" id="quiz_q_${i}">
+      <p>第${i + 1}問：${q.q}</p>
+      <ul class="quiz-options" id="quiz_opts_${i}">
+        ${q.options.map((o, j) => `<li onclick="answerQuiz(${i}, ${j})">${o}</li>`).join('')}
+      </ul>
+      <div class="quiz-explanation" id="quiz_exp_${i}">${q.explanation}</div>
+    </div>
+  `).join('');
+  updateQuizScore();
+}
+
+function answerQuiz(qi, oi) {
+  const opts = document.querySelectorAll(`#quiz_opts_${qi} li`);
+  if (opts[0].classList.contains('disabled')) return;
+  opts.forEach((o, i) => {
+    o.classList.add('disabled');
+    if (i === quizData[qi].correct) o.classList.add('correct');
+    if (i === oi && oi !== quizData[qi].correct) o.classList.add('incorrect');
+  });
+  document.getElementById(`quiz_exp_${qi}`).classList.add('show');
+  quizAnswered++;
+  if (oi === quizData[qi].correct) quizCorrect++;
+  updateQuizScore();
+}
+
+function updateQuizScore() {
+  document.getElementById('quizScore').textContent = `${quizCorrect} / ${quizData.length}`;
+  document.getElementById('quizProgress').style.width = `${(quizAnswered / quizData.length) * 100}%`;
+}
+
+function resetQuiz() {
+  quizAnswered = 0;
+  quizCorrect = 0;
+  renderQuiz();
+}
+
+renderQuiz();
+
+// ==================== 自己評価チェックリスト ====================
+const checklistItems = {
+  structure: [
+    "冒頭の一文に年齢・性別・既往歴・主訴・期間が含まれている",
+    "現病歴が時系列に沿ってOPQRSTフレームワークで整理されている",
+    "既往歴・手術歴が漏れなく報告されている",
+    "常用薬が薬剤名・用量・頻度とともに記載されている",
+    "社会歴に喫煙・飲酒・薬物・職業が含まれている",
+    "身体所見が全身状態とバイタルサインから始まっている",
+    "検査値が単位と基準値（異常値の場合）とともに報告されている",
+    "画像検査にモダリティ・撮影部位・造影有無が明記されている",
+    "要約文が症例の要点を凝縮し鑑別診断へ繋がっている"
+  ],
+  language: [
+    "「came to」ではなく「presented to」を使えている",
+    "「emergency department」と正式名称で言えている",
+    "「woman/man」を使い「female/male」は使っていない",
+    "バイタルサインを略語なしで完全に述べられている",
+    "陰性所見に「The patient denied...」を使えている",
+    "略語を初出時に正式名称で記載できている（例：CT → computed tomography）",
+    "検査値を正式な単位で報告できている（per microliter, mg per deciliter）",
+    "「beats per minute」と省略せずに言えている",
+    "口頭プレゼンテーションで医学略語を避けられている"
+  ],
+  delivery: [
+    "適切な速度で話せている（速すぎない）",
+    "論理的な流れで話し、途中で戻ったりしない",
+    "重要な所見にアクセント（声の強弱）をつけられている",
+    "セクション間で適切な間（ま）を取れている",
+    "メモを見ずにプレゼンテーションができる",
+    "プレゼン中の質問に自信を持って答えられる",
+    "想定される時間内にプレゼンテーションを完了できている"
+  ]
+};
+
+function renderChecklist() {
+  const saved = JSON.parse(localStorage.getItem('casePresChecklist') || '{}');
+  ['structure', 'language', 'delivery'].forEach(cat => {
+    const elId = 'checklist' + cat.charAt(0).toUpperCase() + cat.slice(1);
+    const el = document.getElementById(elId);
+    el.innerHTML = checklistItems[cat].map((item, i) => {
+      const key = `${cat}_${i}`;
+      const checked = saved[key] ? 'checked' : '';
+      return `<li>
+        <input type="checkbox" id="cl_${key}" ${checked} onchange="toggleChecklist('${key}')">
+        <label for="cl_${key}" class="${checked ? 'checked' : ''}">${item}</label>
+      </li>`;
+    }).join('');
+  });
+  updateChecklistProgress();
+}
+
+function toggleChecklist(key) {
+  const saved = JSON.parse(localStorage.getItem('casePresChecklist') || '{}');
+  saved[key] = !saved[key];
+  localStorage.setItem('casePresChecklist', JSON.stringify(saved));
+  renderChecklist();
+}
+
+function updateChecklistProgress() {
+  const saved = JSON.parse(localStorage.getItem('casePresChecklist') || '{}');
+  const total = Object.values(checklistItems).flat().length;
+  const done = Object.values(saved).filter(Boolean).length;
+  document.getElementById('checklistProgress').style.width = `${(done / total) * 100}%`;
+  document.getElementById('checklistCount').textContent = `${done} / ${total} 達成`;
+}
+
+renderChecklist();
+
+// ==================== 救急医の症例提示 練習 ====================
+const emCases = [
+  {
+    id: 1,
+    title: "症例A：多発外傷（不安定）",
+    sections: [
+      {
+        name: "Opening & Prehospital（冒頭・病院前情報）",
+        infoJa: "45歳男性。既往歴なし。高速道路で乗用車同士の正面衝突。運転席、シートベルト非着用。車両は大破し、救出に25分を要した。ドクターヘリで搬送。搬送中に末梢静脈路2本確保、生理食塩水1L投与。現場でのバイタル：GCS 10（E2V3M5）、心拍数132、血圧78/42 mmHg。",
+        hint: "受傷機転（mechanism of injury）を具体的に述べ、搬送手段、現場の状態、病院前介入を含めます。",
+        model: "A 45-year-old man with no significant past medical history was brought to the emergency department by helicopter following a high-speed head-on motor vehicle collision on the highway. Prehospital report indicated that the patient was the unrestrained driver of a passenger vehicle that sustained significant front-end damage. Extrication time was approximately 25 minutes. In the field, the Glasgow Coma Scale score was 10 (E2V3M5), the heart rate was 132 beats per minute, and the blood pressure was 78 over 42 mm Hg. Two peripheral intravenous lines were established, and 1 liter of normal saline was administered en route."
+      },
+      {
+        name: "Initial Impression & Primary Survey（第一印象・一次評価）",
+        infoJa: "【第一印象】来院時、明らかに循環動態不安定。頻呼吸あり、苦悶様。バイタル：体温35.8℃、心拍数138回/分、血圧72/40 mmHg、呼吸数32回/分、SpO2 89%（リザーバーマスク15L）。\n【A】開口あり、血液混じりの分泌物で口腔内汚染あり。吸引を行い気道確保。頸椎カラー装着中。GCS低下傾向のため、ケタミン＋ロクロニウムで迅速導入気管挿管を施行。\n【B】挿管後、左側の呼吸音減弱。気管は右方偏位。左緊張性気胸を疑い、左第2肋間鎖骨中線で針減圧→28Fr胸腔ドレーン挿入。気泡と約400mLの血液を排出。SpO2は89%→97%に改善。\n【C】皮膚は蒼白・冷汗・網状チアノーゼ。CRT 5秒以上。太径静脈路2本を追加確保。大量輸血プロトコル発動。RBC 4単位、FFP 4単位、トラネキサム酸1g投与。骨盤動揺あり→骨盤バインダー装着。\n【D】GCS 7（E1V2M4）。瞳孔：左4mm/右4mm、対光反射あり。\n【E】全身脱衣。前胸部と左側腹部に広範な皮下出血。深部体温35.8℃→加温輸液と温風式加温装置を開始。",
+        hint: "ABCDEの各項目で「所見→判断→介入→結果」を明確に述べます。不安定であることを最初に明言してください。",
+        model: "On arrival, the patient appeared hemodynamically unstable, was tachypneic, and appeared to be in significant distress. The initial vital signs were: temperature 35.8°C, heart rate 138 beats per minute, blood pressure 72 over 40 mm Hg, respiratory rate 32 breaths per minute, and oxygen saturation 89% on 15 liters via a non-rebreather mask.\n\nAirway: The patient had blood-tinged secretions in the oral cavity, which were cleared with suctioning. The cervical spine was immobilized in a rigid collar. Given the declining level of consciousness, rapid sequence intubation was performed using ketamine and rocuronium, with successful placement of the endotracheal tube confirmed by end-tidal CO2 and bilateral breath sounds.\n\nBreathing: Following intubation, breath sounds were diminished on the left, with tracheal deviation to the right, concerning for a left-sided tension pneumothorax. Needle decompression was performed in the left second intercostal space at the midclavicular line, followed by insertion of a 28-French chest tube, which yielded air and approximately 400 mL of blood. The oxygen saturation improved from 89% to 97%.\n\nCirculation: The skin was pale, diaphoretic, and mottled. Capillary refill time was prolonged at greater than 5 seconds. Two additional large-bore intravenous lines were established, and a massive transfusion protocol was activated. The patient received 4 units of packed red blood cells, 4 units of fresh frozen plasma, and 1 gram of tranexamic acid. The pelvis was unstable on compression, and a pelvic binder was applied.\n\nDisability: The Glasgow Coma Scale score was 7 (E1V2M4). The pupils were 4 mm bilaterally and reactive to light.\n\nExposure: The patient was fully exposed. Large ecchymoses were noted across the anterior chest and left flank. The core temperature was 35.8°C. Warmed intravenous fluids and a forced-air warming device were initiated."
+      },
+      {
+        name: "Resuscitation Response & Secondary Survey（蘇生への反応・二次評価）",
+        infoJa: "【蘇生への反応】大量輸血と胸腔ドレナージ後、血圧は88/56 mmHgに一過性に改善したが、その後再び低下。Transient responderと判断。\n【FAST】モリソン窩と脾臓周囲に液体貯留（陽性）。\n【二次評価で得られた追加情報】妻によると、常用薬はアムロジピン5mgとアスピリン100mg。アレルギーなし。既往は高血圧のみ。昼食を3時間前に摂取。\n【Head-to-Toe】右頭頂部に5cmの裂創。顔面に変形・捻髪音なし。頸椎は軸方向固定下でカラーを外して診察→正中圧痛なし。胸部は左前胸部に圧痛・捻髪音（肋骨骨折を示唆）。腹部は膨満し全体に圧痛・筋性防御あり。四肢は左大腿部の変形と腫脹あり（大腿骨骨折を疑う）。背面はログロールで診察→左腰背部に挫傷あり。",
+        hint: "蘇生への反応を分類（transient responder）してから、FAST所見とAMPLE、Head-to-Toeの順で述べます。",
+        model: "Following initial resuscitation with massive transfusion and left chest tube placement, the blood pressure transiently improved to 88 over 56 mm Hg but subsequently declined again. The patient was classified as a transient responder.\n\nA FAST examination was positive, with free fluid identified in Morrison's pouch and the perisplenic space.\n\nOnce feasible, additional history was obtained from the patient's wife. Medications included amlodipine 5 mg daily and aspirin 100 mg daily. There were no known drug allergies. Past medical history was notable only for hypertension. The last oral intake was approximately 3 hours before the incident.\n\nA complete secondary survey was performed. There was a 5-centimeter laceration of the right parietal scalp. The face was without deformity or crepitus. The neck examination, after removal of the cervical collar with in-line stabilization, revealed no midline tenderness or step-off deformity. The chest demonstrated tenderness and crepitus over the left anterolateral chest wall, suggestive of rib fractures. The abdomen was distended and diffusely tender with involuntary guarding. Examination of the extremities revealed deformity and swelling of the left thigh, concerning for a femur fracture. The back was examined with a log-roll, which revealed contusion of the left flank."
+      },
+      {
+        name: "Workup, Disposition & Summary（検査・転帰・要約）",
+        infoJa: "【検査】静脈血ガス：pH 7.15、乳酸値 7.8 mmol/L。Hb 6.8 g/dL。INR 1.8。循環動態が一過性に安定した時点で全身CTを撮影。脾損傷 Grade IV（造影剤漏出あり）、左第4-9肋骨骨折、左血気胸（ドレナージ後）、左大腿骨骨幹部骨折、頭蓋内出血なし。\n【転帰】外傷外科にコンサルトし、緊急開腹術（脾臓摘出術）の方針。続いて整形外科による大腿骨髄内釘固定術を予定。術後はSICUに入室。\n【要約】高速正面衝突で搬送された45歳男性。循環動態不安定で来院し、一次評価で左緊張性気胸と出血性ショックを認めた。初期蘇生（胸腔ドレナージ、大量輸血）に対し一過性反応者であり、CTで脾損傷Grade IVと多発肋骨骨折、大腿骨骨折を認めた。緊急脾摘術を施行した。",
+        hint: "「Once hemodynamically stable enough for transport」のフレーズを使い、検査のタイミングと臨床判断を示します。要約ではABCの異常→蘇生→検査→転帰を簡潔に。",
+        model: "Point-of-care testing revealed a venous blood gas with a pH of 7.15 and a lactate of 7.8 millimoles per liter. The hemoglobin was 6.8 grams per deciliter, and the international normalized ratio was 1.8.\n\nOnce the patient was hemodynamically stable enough for transport following ongoing massive transfusion, a CT pan-scan was obtained. This revealed a grade IV splenic laceration with active contrast extravasation, fractures of the left 4th through 9th ribs, a left hemopneumothorax with the chest tube in place, and a left femoral shaft fracture. There was no intracranial hemorrhage.\n\nTrauma surgery was consulted, and the patient was taken emergently to the operating room for exploratory laparotomy, which confirmed a grade IV splenic injury requiring splenectomy. Orthopedic fixation of the femoral fracture with an intramedullary nail was planned as a staged procedure. The patient was admitted to the surgical intensive care unit postoperatively.\n\nIn summary, this is a 45-year-old man involved in a high-speed head-on motor vehicle collision who presented in hemodynamically unstable condition. The primary survey was notable for a compromised airway requiring intubation, a left tension pneumothorax requiring chest tube placement, and hemorrhagic shock. He was classified as a transient responder to massive transfusion. Workup revealed a grade IV splenic laceration with active extravasation, multiple rib fractures, and a femoral shaft fracture. He underwent emergent splenectomy and was admitted to the surgical intensive care unit."
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: "症例B：敗血症性ショック（不安定）",
+    sections: [
+      {
+        name: "Opening & Prehospital（冒頭・病院前情報）",
+        infoJa: "72歳女性。糖尿病、慢性腎臓病（CKD Stage 3b）の既往あり。3日前からの発熱と全身倦怠感があり、本日朝に自宅で倒れているところを夫が発見し、119番通報。救急隊到着時、意識は朦朧としており発語不明瞭。バイタル：体温39.4℃、心拍数128、血圧76/48 mmHg、SpO2 91%（室内気）。末梢静脈路を確保し搬送。",
+        hint: "内因性疾患でも、病院前情報（発見状況、搬送時バイタル、介入）は救急プレゼンに重要です。",
+        model: "A 72-year-old woman with a history of type 2 diabetes mellitus and chronic kidney disease stage 3b was brought to the emergency department by emergency medical services after being found by her husband lying on the floor at home this morning with altered mental status. She had reportedly had fever and malaise for the preceding three days. On EMS arrival, the patient was confused with slurred speech. Prehospital vital signs were: temperature 39.4°C, heart rate 128 beats per minute, blood pressure 76 over 48 mm Hg, and oxygen saturation 91% on room air. A peripheral intravenous line was established en route."
+      },
+      {
+        name: "Initial Impression & Primary Survey（第一印象・一次評価）",
+        infoJa: "【第一印象】来院時、明らかに重症感あり。循環動態不安定。バイタル：体温39.6℃、心拍数134回/分、血圧68/38 mmHg、呼吸数28回/分、SpO2 90%（鼻カニューラ2L）。\n【A】気道は開通。発語は不明瞭だが気道自体は維持されている。\n【B】頻呼吸。両側下肺野で湿性ラ音を聴取。リザーバーマスク15Lに変更し、SpO2は90%→96%に改善。\n【C】皮膚は温かく紅潮しているが、血圧は低い（warm shock）。CRT 4秒。太径静脈路を2本追加確保。生理食塩水30 mL/kgの急速輸液を開始。血液培養2セット採取後、広域抗菌薬（メロペネム1g）を投与。初回輸液後も血圧78/44 mmHgと低値のため、ノルエピネフリン 0.1 μg/kg/minで昇圧を開始。\n【D】GCS 13（E3V4M6）。瞳孔正常。四肢の動きは左右対称。\n【E】全身脱衣。左CVA叩打痛あり。体幹に斑状の皮疹なし。",
+        hint: "warm shockの特徴的所見を含めます。Circulationでは「Hour-1 Bundle」の要素（培養採取、抗菌薬、輸液、昇圧剤）が入っている点を意識してください。",
+        model: "On arrival, the patient appeared acutely ill and was hemodynamically unstable. The vital signs were: temperature 39.6°C, heart rate 134 beats per minute, blood pressure 68 over 38 mm Hg, respiratory rate 28 breaths per minute, and oxygen saturation 90% on 2 liters of supplemental oxygen via nasal cannula.\n\nAirway: The airway was patent. Speech was slurred, but the patient was maintaining her own airway.\n\nBreathing: The patient was tachypneic. Auscultation revealed crackles in the bilateral lower lung fields. The patient was placed on 15 liters of oxygen via a non-rebreather mask, with improvement in oxygen saturation from 90% to 96%.\n\nCirculation: The skin was warm and flushed, but the blood pressure was critically low, a presentation consistent with distributive shock. Capillary refill time was 4 seconds. Two additional large-bore intravenous lines were established. Two sets of blood cultures were obtained, and broad-spectrum antibiotics — meropenem 1 gram — were administered intravenously. A 30 mL per kilogram crystalloid bolus was initiated. Following the initial fluid bolus, the blood pressure remained at 78 over 44 mm Hg, and a norepinephrine infusion was started at 0.1 micrograms per kilogram per minute.\n\nDisability: The Glasgow Coma Scale score was 13 (E3V4M6). The pupils were equal and reactive. Limb movements were symmetric.\n\nExposure: The patient was fully exposed. There was left costovertebral angle tenderness on percussion. No rash was identified."
+      },
+      {
+        name: "Resuscitation Response & Secondary Survey（蘇生への反応・二次評価）",
+        infoJa: "【蘇生への反応】輸液2Lとノルエピネフリン0.15 μg/kg/minで血圧96/58 mmHg、心拍数112回/分に改善。乳酸値は初回6.4→2時間後3.8 mmol/Lに低下。\n【病歴】夫によると、3日前から38℃台の発熱と排尿時痛あり。食事量は減っていた。水分摂取も少なかった。常用薬：メトホルミン500mg×2回/日、リシノプリル10mg/日、インスリングラルギン12単位/日。アレルギー：ペニシリン（発疹）。最終経口摂取は前日の夕食。既往：2型糖尿病（10年）、CKD Stage 3b、高血圧。昨年、急性腎盂腎炎で入院歴あり。\n【二次評価】頭頸部異常なし。心音整・雑音なし。肺は前述。腹部は軟、左CVA叩打痛あり、下腹部に軽度圧痛。四肢浮腫なし。皮膚に紫斑・皮疹なし。",
+        hint: "蘇生の反応を定量的に（血圧、心拍、乳酸値の推移）述べます。病歴ではAMPLEとペニシリンアレルギーに注意。",
+        model: "Following administration of 2 liters of crystalloid and uptitration of norepinephrine to 0.15 micrograms per kilogram per minute, the blood pressure improved to 96 over 58 mm Hg, and the heart rate decreased to 112 beats per minute. The initial serum lactate was 6.4 millimoles per liter, which decreased to 3.8 millimoles per liter at the 2-hour reassessment, indicating response to resuscitation.\n\nA more detailed history was obtained from the patient's husband. She had developed fever to 38°C and dysuria three days prior to presentation. Oral intake had been poor. Home medications included metformin 500 mg twice daily, lisinopril 10 mg daily, and insulin glargine 12 units daily. She had a documented allergy to penicillin, which caused a rash. Past medical history was notable for type 2 diabetes mellitus for 10 years, chronic kidney disease stage 3b, and hypertension. She had been hospitalized for acute pyelonephritis one year prior. Her last oral intake was dinner the previous evening.\n\nThe secondary survey revealed no abnormalities of the head or neck. Cardiac examination demonstrated a regular rate and rhythm with no murmurs. Lung findings were as described above. The abdomen was soft with left costovertebral angle tenderness and mild suprapubic tenderness. There was no lower-extremity edema. No purpura or rash was identified on skin examination."
+      },
+      {
+        name: "Workup, Disposition & Summary（検査・転帰・要約）",
+        infoJa: "【検査】静脈血ガス：pH 7.28、乳酸値6.4 mmol/L（初回）。血液検査：白血球24,800/μL（好中球92%、桿状核球15%）、Hb 10.2 g/dL、血小板 88,000/μL、CRP 28.4 mg/dL、プロカルシトニン 18.5 ng/mL、BUN 48 mg/dL、クレアチニン 3.2 mg/dL（ベースライン1.8）、乳酸値 6.4→3.8 mmol/L。尿検査：白血球多数、亜硝酸塩陽性、グラム染色でグラム陰性桿菌。腹部CT（造影）：左腎腫大と腎周囲の脂肪織混濁、左尿管の軽度拡張。膿瘍形成なし。\n【転帰】敗血症性ショック、尿路感染症（腎盂腎炎）と診断。泌尿器科にコンサルト。ICUに入室し、ノルエピネフリン継続、抗菌薬継続、乳酸値の再検を2時間ごとに行う方針。\n【要約】糖尿病とCKDの既往がある72歳女性。3日間の発熱と全身倦怠感で、自宅で倒れているところを発見された。循環動態不安定（warm shock）で来院し、輸液・昇圧剤・広域抗菌薬による初期蘇生で改善傾向。検査で白血球増多・血小板減少・急性腎障害・乳酸値上昇を認め、尿検査と画像所見から急性腎盂腎炎による敗血症性ショックと診断した。",
+        hint: "敗血症のバンドル（培養、抗菌薬、輸液、乳酸値フォロー、昇圧剤）に沿った蘇生を反映させます。",
+        model: "Point-of-care venous blood gas revealed a pH of 7.28 with an initial lactate of 6.4 millimoles per liter. Laboratory studies showed a white-cell count of 24,800 per microliter with 92% neutrophils and 15% band forms, a hemoglobin of 10.2 grams per deciliter, a platelet count of 88,000 per microliter, a C-reactive protein of 28.4 mg per deciliter, and a procalcitonin of 18.5 nanograms per milliliter. The blood urea nitrogen was 48 mg per deciliter, and the creatinine was 3.2 mg per deciliter, elevated from a baseline of 1.8. Urinalysis revealed numerous white blood cells and was positive for nitrites. Gram stain of the urine showed gram-negative rods. Computed tomography of the abdomen and pelvis with intravenous contrast revealed left renal enlargement with perinephric fat stranding and mild left ureteral dilatation. No abscess was identified.\n\nThe patient was diagnosed with septic shock secondary to acute pyelonephritis. Urology was consulted. She was admitted to the intensive care unit for continued vasopressor support, ongoing antibiotic therapy, and serial lactate monitoring every 2 hours.\n\nIn summary, this is a 72-year-old woman with diabetes mellitus and chronic kidney disease who was found unresponsive at home after three days of fever and malaise. She presented in hemodynamically unstable condition consistent with distributive shock. The primary survey was notable for tachypnea with hypoxia and warm shock requiring vasopressor support. Initial resuscitation with crystalloid, broad-spectrum antibiotics, and norepinephrine resulted in improvement of hemodynamics and trending of the lactate. Workup revealed leukocytosis with bandemia, thrombocytopenia, acute kidney injury, and imaging findings consistent with acute pyelonephritis, confirming a diagnosis of septic shock secondary to urinary tract infection."
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "症例C：急性冠症候群（安定→不安定）",
+    sections: [
+      {
+        name: "Opening & Initial Impression（冒頭・第一印象）",
+        infoJa: "58歳男性。高血圧、脂質異常症の既往あり。1時間前からの胸痛で妻の運転で救急外来を受診した。来院時は会話可能で、意識は清明だが苦悶様表情あり。バイタル：体温36.6℃、心拍数88回/分、血圧148/92 mmHg、呼吸数18回/分、SpO2 98%（室内気）。来院時の第一印象は臨床的に安定。",
+        hint: "安定な患者でも、まず安定であることを明言します。ただし「安定に見えるが危険な疾患を除外する必要がある」という意識を持ちます。",
+        model: "A 58-year-old man with a history of hypertension and hyperlipidemia presented to the emergency department via private vehicle with chest pain of one hour's duration. On arrival, the patient appeared clinically stable. He was alert, oriented, and conversant, though he appeared to be in moderate discomfort. The vital signs were: temperature 36.6°C, heart rate 88 beats per minute, blood pressure 148 over 92 mm Hg, respiratory rate 18 breaths per minute, and oxygen saturation 98% while breathing room air."
+      },
+      {
+        name: "Primary Survey & Focused Assessment（一次評価・焦点的評価）",
+        infoJa: "【A】気道開通。完全な文で発話可能。\n【B】呼吸は努力なし。肺野清明。\n【C】橈骨動脈は左右とも触知良好。皮膚は温かく乾燥。毛細血管再充満時間2秒。12誘導心電図を直ちに施行 → V1-V4でST上昇、II・III・aVFで reciprocal change。直ちにアスピリン300mg咀嚼投与、ヘパリン5000単位静注、ニトログリセリン舌下投与。循環器内科に緊急コンサルト（カテーテル室の準備を要請）。\n【D】GCS 15。神経学的異常なし。\n【安定→不安定への変化】心電図施行直後、突然VF（心室細動）に移行。直ちにCPR開始、二相性200Jで除細動施行。1回の除細動で洞調律に復帰。意識回復。除細動後のバイタル：心拍数96回/分、血圧110/72 mmHg。",
+        hint: "安定な患者でもABCDの確認は行います。特にCでは「time-sensitive condition」として心電図の即時施行を強調。VFへの移行と蘇生を述べることで、救急医の判断と対応力を示します。",
+        model: "Airway: The airway was patent and self-maintained. The patient was speaking in full sentences.\n\nBreathing: Respirations were unlabored. The lungs were clear to auscultation bilaterally.\n\nCirculation: Radial pulses were palpable and equal bilaterally. The skin was warm and dry, with a capillary refill time of 2 seconds. A 12-lead electrocardiogram was obtained immediately, which showed ST-segment elevation in leads V1 through V4 with reciprocal ST depression in leads II, III, and aVF, consistent with an acute anterior ST-elevation myocardial infarction. Aspirin 300 mg was administered by mouth, heparin 5,000 units was given intravenously, and sublingual nitroglycerin was provided. Cardiology was emergently consulted and the cardiac catheterization laboratory was activated.\n\nDisability: The Glasgow Coma Scale score was 15. No focal neurological deficits were identified.\n\nShortly after the electrocardiogram was obtained, the patient developed ventricular fibrillation. Cardiopulmonary resuscitation was initiated immediately, and a biphasic shock at 200 joules was delivered. Sinus rhythm was restored after a single defibrillation. The patient regained consciousness. Post-defibrillation vital signs were: heart rate 96 beats per minute and blood pressure 110 over 72 mm Hg."
+      },
+      {
+        name: "Workup, Disposition & Summary（検査・転帰・要約）",
+        infoJa: "【検査】トロポニンI 8.2 ng/mL（基準値<0.04）。BNP 420 pg/mL。その他血液検査は著明な異常なし。心エコー（ポイントオブケア）：前壁の壁運動低下、EF約35%。\n【転帰】除細動後も意識清明で循環動態安定。直ちにカテーテル室に搬送。左前下行枝の完全閉塞を認め、薬剤溶出ステント留置で再灌流に成功。術後CCUに入室。\n【要約】高血圧・脂質異常症の既往がある58歳男性が、1時間前からの胸痛で受診。来院時は臨床的に安定していたが、心電図で前壁STEMIを認め、初期治療中に心室細動を発症。1回の除細動で洞調律に復帰。緊急心臓カテーテル検査でLAD完全閉塞を認め、PCI（ステント留置）で再灌流に成功した。",
+        hint: "「安定→不安定への急変」を経験した症例として、救急医がtime-criticalな判断（早期心電図、即座の除細動、カテ室の活性化）を行ったことを要約に反映させます。",
+        model: "The initial troponin I was 8.2 ng per milliliter (reference value, <0.04). The B-type natriuretic peptide was 420 pg per milliliter. The remainder of the laboratory studies were unremarkable. A point-of-care echocardiogram demonstrated anterior wall hypokinesis with an estimated ejection fraction of approximately 35%.\n\nFollowing successful defibrillation, the patient remained alert and hemodynamically stable. He was transported directly to the cardiac catheterization laboratory, where coronary angiography revealed complete occlusion of the left anterior descending artery. Successful percutaneous coronary intervention was performed with placement of a drug-eluting stent, achieving restoration of flow. The patient was admitted to the coronary care unit.\n\nIn summary, this is a 58-year-old man with cardiovascular risk factors who presented with acute chest pain. Although clinically stable on arrival, an immediate 12-lead electrocardiogram revealed an anterior ST-elevation myocardial infarction. During initial management, the patient developed ventricular fibrillation, which was successfully treated with a single defibrillation. He underwent emergent percutaneous coronary intervention with stenting of a completely occluded left anterior descending artery, with successful reperfusion."
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: "症例D：アナフィラキシー（安定→急速悪化）",
+    sections: [
+      {
+        name: "Opening & Initial Impression（冒頭・第一印象）",
+        infoJa: "32歳女性。喘息の既往あり（吸入ステロイドで管理）。薬剤アレルギーの既往なし。友人との昼食でエビ料理を食べた約15分後にレストラン内で全身の掻痒感と呼吸困難を発症。友人が119番通報。救急隊到着時、全身に膨疹、顔面と口唇の浮腫、喘鳴あり。搬送中にアドレナリン0.3mg筋注（大腿外側）を1回投与。来院時バイタル：体温36.8℃、心拍数132回/分、血圧78/42 mmHg、呼吸数30回/分、SpO2 88%（リザーバーマスク15L）。来院時の第一印象：循環動態不安定、呼吸不全の進行あり。",
+        hint: "アナフィラキシーはABCの全てが同時に脅かされうる疾患です。アレルゲン暴露から発症までの時間、病院前でのアドレナリン投与の有無を必ず含めます。",
+        model: "A 32-year-old woman with a history of asthma, controlled with inhaled corticosteroids, and no known drug allergies, was brought to the emergency department by emergency medical services after developing generalized pruritus and respiratory distress approximately 15 minutes after eating shrimp at a restaurant. Prehospital report indicated generalized urticaria, facial and lip angioedema, and audible wheezing. Intramuscular epinephrine 0.3 mg was administered to the lateral thigh en route. On arrival, the patient appeared hemodynamically unstable with signs of progressive respiratory failure. The vital signs were: temperature 36.8°C, heart rate 132 beats per minute, blood pressure 78 over 42 mm Hg, respiratory rate 30 breaths per minute, and oxygen saturation 88% on 15 liters via a non-rebreather mask."
+      },
+      {
+        name: "Primary Survey & Resuscitation（一次評価・蘇生）",
+        infoJa: "【A】嗄声あり、「声が出にくい」と訴える。口腔内を観察すると舌と口蓋垂の著明な浮腫あり。気道狭窄の進行を認め、喉頭浮腫によるairway compromiseと判断。挿管の準備を開始（困難気道対応として外科的気道確保の準備も並行）。ケタミン＋ロクロニウムでRSIを施行。声門浮腫のためビデオ喉頭鏡で6.0mm ETTを使用し挿管成功。\n【B】挿管後、両側で著明な呼吸音の減弱と広範なwheezingを聴取。気管支攣縮と判断。連続ネブライザー（サルブタモール）を開始。挿管後SpO2は88%→94%に改善。\n【C】warm shockの所見（皮膚は温かく紅潮、血圧低値）。太径静脈路2本確保。生理食塩水20 mL/kgの急速輸液開始。アドレナリン0.3mg筋注を追加投与（計2回目）。輸液とアドレナリン後も血圧84/50 mmHgのため、アドレナリン持続静注 0.1 μg/kg/minを開始。メチルプレドニゾロン125mg静注、ファモチジン20mg静注を投与。\n【D】挿管前GCS 14（E4V4M6）。挿管・鎮静後は評価不能（薬剤の影響）。瞳孔正常。\n【E】全身に膨疹。顔面・口唇・眼瞼の著明な血管性浮腫。体幹に紅斑。深部体温36.8℃。",
+        hint: "アナフィラキシーではA（喉頭浮腫）→B（気管支攣縮）→C（分布性ショック）が同時進行します。各項目で所見→判断→介入→結果を述べ、アドレナリンの投与回数と経路も明確に。困難気道への備えも示します。",
+        model: "Airway: The patient was hoarse and reported difficulty speaking. Inspection of the oral cavity revealed significant edema of the tongue and uvula. Given the progressive airway narrowing due to laryngeal angioedema, the decision was made to secure the airway. Preparations for a surgical airway were made in parallel as a contingency for a difficult airway. Rapid sequence intubation was performed using ketamine and rocuronium. Due to glottic edema, a 6.0-mm endotracheal tube was placed using video laryngoscopy with successful first-pass intubation.\n\nBreathing: Following intubation, auscultation revealed markedly diminished breath sounds bilaterally with diffuse wheezing, consistent with severe bronchospasm. Continuous nebulized salbutamol was initiated. The oxygen saturation improved from 88% to 94% following intubation and bronchodilator therapy.\n\nCirculation: The patient demonstrated distributive shock with warm, flushed skin and hypotension. Two large-bore intravenous lines were established, and a 20 mL per kilogram normal saline bolus was initiated. A second dose of intramuscular epinephrine 0.3 mg was administered. As the blood pressure remained at 84 over 50 mm Hg despite fluid resuscitation and two doses of intramuscular epinephrine, an intravenous epinephrine infusion was started at 0.1 micrograms per kilogram per minute. Methylprednisolone 125 mg and famotidine 20 mg were administered intravenously.\n\nDisability: The Glasgow Coma Scale score was 14 (E4V4M6) prior to intubation. Post-intubation neurological assessment was limited by sedation. Pupils were equal and reactive.\n\nExposure: Generalized urticaria was present. There was significant angioedema of the face, lips, and eyelids, with diffuse erythema of the trunk. Core temperature was 36.8°C."
+      },
+      {
+        name: "Clinical Course, Disposition & Summary（経過・転帰・要約）",
+        infoJa: "【蘇生への反応】アドレナリン持続静注開始30分後、血圧は102/64 mmHgに改善。心拍数は108回/分に低下。気管支攣縮も改善しwheezing軽減。SpO2 98%。\n【検査】血清トリプターゼ 28.5 μg/L（基準値<11.4）。血液ガス（挿管後）：pH 7.32、PaCO2 38 mmHg、PaO2 92 mmHg（FiO2 0.6）。その他著明な異常なし。\n【転帰】ICUに入室。アドレナリン持続静注を漸減しつつ、ステロイドと抗ヒスタミン薬を継続。入室6時間後にアドレナリン持続静注を中止。翌日に抜管し、24時間の経過観察後に一般病棟へ転棟。アレルギー科にコンサルトし、退院後のエピペン処方と原因精査を計画。\n【要約】喘息の既往がある32歳女性が、エビ摂取15分後にアナフィラキシーを発症。喉頭浮腫による気道狭窄、重度の気管支攣縮、分布性ショックを呈した。迅速な気管挿管、アドレナリン投与（筋注2回＋持続静注）、輸液蘇生、ステロイド・抗ヒスタミン薬投与で改善。ICUに入室し、翌日に抜管した。",
+        hint: "アナフィラキシーの要約では「トリガー→ABCの異常→蘇生内容→反応→転帰」の流れで。トリプターゼはアナフィラキシーの確定に有用な検査です。退院後の計画（エピペン処方、アレルギー科フォロー）まで含めます。",
+        model: "Thirty minutes after initiation of the intravenous epinephrine infusion, the blood pressure improved to 102 over 64 mm Hg, and the heart rate decreased to 108 beats per minute. Bronchospasm improved with resolution of wheezing, and the oxygen saturation was 98%.\n\nA serum tryptase level was 28.5 micrograms per liter (reference value, <11.4), supporting the diagnosis of anaphylaxis. An arterial blood gas obtained after intubation showed a pH of 7.32, a PaCO2 of 38 mm Hg, and a PaO2 of 92 mm Hg on a fraction of inspired oxygen of 0.6. The remainder of the laboratory studies were unremarkable.\n\nThe patient was admitted to the intensive care unit. The epinephrine infusion was gradually weaned and discontinued 6 hours after admission. Corticosteroids and antihistamines were continued. The patient was extubated the following day and was transferred to the general ward after 24 hours of observation. Allergy and immunology was consulted for outpatient follow-up, including epinephrine auto-injector prescription and identification of the causative allergen.\n\nIn summary, this is a 32-year-old woman with a history of asthma who developed anaphylaxis approximately 15 minutes after ingestion of shrimp. She presented with laryngeal angioedema requiring emergent intubation, severe bronchospasm, and distributive shock. Initial resuscitation included rapid sequence intubation, two doses of intramuscular epinephrine followed by an intravenous epinephrine infusion, aggressive fluid resuscitation, corticosteroids, and antihistamines. The patient responded to treatment and was admitted to the intensive care unit, where she was successfully extubated the following day."
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: "症例E：心肺停止（ROSC後管理）",
+    sections: [
+      {
+        name: "Opening & Prehospital（冒頭・病院前情報）",
+        infoJa: "63歳男性。高血圧、2型糖尿病、喫煙歴（30 pack-year、現在も喫煙中）の既往あり。本日11時頃、職場の会議中に突然意識を失い倒れた。同僚が目撃し、直ちに119番通報と胸骨圧迫を開始した。AED（職場設置）を使用し、初回解析でショック適応（VF）、1回のショックで自己心拍再開（ROSC）。ROSC時刻は11時08分（推定心停止から約8分後）。救急隊到着時（11時12分）、自発呼吸あり、GCS 6（E1V2M3）。12誘導心電図でII, III, aVFにST上昇。搬送中にバッグバルブマスクで補助換気。末梢静脈路確保、生理食塩水投与開始。来院時刻11時28分。",
+        hint: "心停止症例では「目撃の有無」「バイスタンダーCPR」「初期波形」「CPR開始からROSCまでの時間」が予後予測に重要。これらを全て含めます。ROSC後のSTEMI所見にも言及。",
+        model: "A 63-year-old man with a history of hypertension, type 2 diabetes mellitus, and a 30-pack-year smoking history was brought to the emergency department by emergency medical services following a witnessed cardiac arrest at his workplace. At approximately 11:00 AM, the patient suddenly lost consciousness and collapsed during a meeting. A colleague immediately called emergency services and initiated chest compressions. A workplace automated external defibrillator identified ventricular fibrillation and delivered one shock, achieving return of spontaneous circulation at 11:08 AM, approximately 8 minutes after the estimated time of arrest. On EMS arrival at 11:12 AM, the patient had spontaneous respirations but a depressed level of consciousness with a Glasgow Coma Scale score of 6 (E1V2M3). A 12-lead electrocardiogram obtained in the field showed ST-segment elevation in leads II, III, and aVF. The patient was ventilated with a bag-valve-mask device en route. A peripheral intravenous line was established and normal saline was initiated. The patient arrived at the emergency department at 11:28 AM."
+      },
+      {
+        name: "Initial Impression & Primary Survey（第一印象・一次評価）",
+        infoJa: "【第一印象】ROSC後。自発呼吸はあるが不規則で不十分。意識は回復していない。バイタル：体温36.2℃、心拍数94回/分（整）、血圧98/62 mmHg、呼吸数8回/分（不規則）、SpO2 91%（BVM補助下）。\n【A】GCS 6で気道防御反射が不十分。嘔吐のリスクも高い。ケタミン＋ロクロニウムでRSI施行。挿管はビデオ喉頭鏡で一回で成功。\n【B】挿管後、両側呼吸音を確認。ETCO2 32 mmHg。FiO2 1.0で管理開始。SpO2 91%→99%に改善。目標SpO2 94-98%としFiO2を漸減。\n【C】心拍は整。12誘導心電図を再検：II, III, aVFにST上昇持続、V1-V3にreciprocal change。下壁STEMI。血圧98/62 mmHgとやや低値。生理食塩水500mLボーラス投与で血圧108/68 mmHgに改善。右室梗塞の合併を除外するため右側胸部誘導を施行→V4Rで ST上昇あり、右室梗塞の合併を確認。循環器内科に緊急コンサルト（カテーテル室を起動）。\n【D】GCS 6T（挿管後：E1VTM4）。瞳孔：両側3mm、対光反射あり（良好な神経学的予後を示唆）。角膜反射あり。\n【E】全身に明らかな外傷なし。深部体温36.2℃。ROSC後の体温管理（TTM: Targeted Temperature Management）として、目標体温36℃の維持を開始。",
+        hint: "ROSC後のPrimary Surveyは通常の蘇生後管理（post-cardiac arrest care）に準じます。STEMIの再確認と右室梗塞の評価、早期のカテ室起動、TTMの開始がkey actionです。",
+        model: "On arrival, the patient had return of spontaneous circulation but had not regained consciousness. Spontaneous respirations were present but irregular and inadequate. The vital signs were: temperature 36.2°C, heart rate 94 beats per minute and regular, blood pressure 98 over 62 mm Hg, respiratory rate 8 breaths per minute and irregular, and oxygen saturation 91% with bag-valve-mask assisted ventilation.\n\nAirway: Given the Glasgow Coma Scale score of 6 with inadequate airway protective reflexes and a high risk of aspiration, rapid sequence intubation was performed using ketamine and rocuronium. The endotracheal tube was placed successfully on the first attempt using video laryngoscopy.\n\nBreathing: Bilateral breath sounds were confirmed. End-tidal CO2 was 32 mm Hg. The patient was initially ventilated on a fraction of inspired oxygen of 1.0, with oxygen saturation improving from 91% to 99%. The FiO2 was titrated down to target an oxygen saturation of 94 to 98% to avoid hyperoxia.\n\nCirculation: The cardiac rhythm was regular sinus. A repeat 12-lead electrocardiogram confirmed persistent ST-segment elevation in leads II, III, and aVF with reciprocal changes in V1 through V3, consistent with an acute inferior ST-elevation myocardial infarction. The blood pressure was 98 over 62 mm Hg. A 500-mL normal saline bolus was administered, and the blood pressure improved to 108 over 68 mm Hg. Right-sided precordial leads were obtained; ST-segment elevation in V4R confirmed concomitant right ventricular involvement. Cardiology was emergently consulted and the cardiac catheterization laboratory was activated.\n\nDisability: The Glasgow Coma Scale score was 6T (E1VTM4) following intubation. The pupils were 3 mm bilaterally and reactive to light, which was a favorable prognostic sign. Corneal reflexes were present.\n\nExposure: No external injuries were identified. The core temperature was 36.2°C. Targeted temperature management was initiated with a goal temperature of 36°C."
+      },
+      {
+        name: "Workup, Disposition & Summary（検査・転帰・要約）",
+        infoJa: "【検査】トロポニンI 3.8 ng/mL（基準値<0.04）。静脈血ガス：pH 7.22、乳酸値 5.4 mmol/L。血糖 218 mg/dL（インスリン投与で管理開始）。K 3.8 mEq/L。Mg 1.6 mg/dL（補充）。その他の血液検査：著明な異常なし。心エコー（ポイントオブケア）：下壁と右室の壁運動低下。EF約40%。心嚢液なし。\n【転帰】カテーテル室に搬送。右冠動脈の完全閉塞を認め、薬剤溶出ステント留置で再灌流に成功（door-to-balloon time 52分）。術後はCCUに入室。TTM（目標体温36℃、24時間維持）を継続。術後12時間で自発的に開眼し、翌日に抜管。神経学的後遺症なし。\n【要約】高血圧・糖尿病・喫煙歴のある63歳男性。職場での目撃ありの心停止で、初期波形VF、バイスタンダーCPRとAED使用により推定8分でROSC。ROSC後の心電図で下壁STEMI（右室梗塞合併）を認めた。救急外来での初期管理（気管挿管、循環管理、TTM開始）後、緊急PCIで右冠動脈完全閉塞にステント留置し再灌流に成功。術後の神経学的予後は良好であった。",
+        hint: "心停止後の症例要約では「cardiac arrest → bystander response → ROSC → post-arrest care → definitive treatment → neurological outcome」の流れが重要です。door-to-balloon timeは質の指標として報告します。",
+        model: "The initial troponin I was 3.8 ng per milliliter (reference value, <0.04). A venous blood gas showed a pH of 7.22 with a lactate of 5.4 millimoles per liter. The blood glucose was 218 mg per deciliter; an insulin infusion was initiated. Potassium was 3.8 milliequivalents per liter. Magnesium was 1.6 mg per deciliter and was repleted. The remainder of the laboratory studies were unremarkable. A point-of-care echocardiogram demonstrated inferior wall and right ventricular hypokinesis with an estimated ejection fraction of approximately 40%. There was no pericardial effusion.\n\nThe patient was transported to the cardiac catheterization laboratory, where coronary angiography revealed complete occlusion of the right coronary artery. Successful percutaneous coronary intervention was performed with placement of a drug-eluting stent, achieving restoration of flow. The door-to-balloon time was 52 minutes. The patient was admitted to the coronary care unit. Targeted temperature management at 36°C was continued for 24 hours. At 12 hours postoperatively, the patient began opening his eyes spontaneously. He was extubated the following day with no neurological deficits.\n\nIn summary, this is a 63-year-old man with cardiovascular risk factors including hypertension, diabetes, and a significant smoking history, who experienced a witnessed cardiac arrest at his workplace with an initial rhythm of ventricular fibrillation. Bystander cardiopulmonary resuscitation and automated external defibrillator use achieved return of spontaneous circulation in approximately 8 minutes. Post-arrest evaluation revealed an inferior ST-elevation myocardial infarction with right ventricular involvement. Emergency department management included endotracheal intubation, hemodynamic stabilization, and initiation of targeted temperature management. The patient underwent emergent percutaneous coronary intervention with successful stenting of a completely occluded right coronary artery. The neurological outcome was favorable, with full recovery and extubation on the following day."
+      }
+    ]
+  }
+];
+
+let currentEmCase = 0;
+
+function renderEmCaseSelector() {
+  const el = document.getElementById('emCaseSelector');
+  el.innerHTML = emCases.map((c, i) =>
+    `<button class="${i === currentEmCase ? 'active' : ''}" onclick="selectEmCase(${i})">${c.title}</button>`
+  ).join('');
+}
+
+function selectEmCase(i) {
+  currentEmCase = i;
+  renderEmCaseSelector();
+  renderEmPractice();
+}
+
+function renderEmPractice() {
+  const c = emCases[currentEmCase];
+  const el = document.getElementById('emPracticeContent');
+  el.innerHTML = c.sections.map((s, i) => `
+    <div style="margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border);">
+      <h3 style="font-size:1rem; color:var(--primary);">${s.name}</h3>
+      <div class="case-info-ja"><strong>【症例情報】</strong><br>${s.infoJa.replace(/\n/g, '<br>')}</div>
+      <div class="tip" style="margin-bottom:0.8rem;"><strong>ヒント：</strong>${s.hint}</div>
+      <textarea class="practice-textarea" placeholder="ここに英語でプレゼンテーションを書いてください..."></textarea>
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="document.getElementById('emModel_${currentEmCase}_${i}').classList.toggle('show')">模範解答を見る</button>
+        <button class="btn btn-accent" onclick="speak(emCases[${currentEmCase}].sections[${i}].model.replace(/\\n/g, ' '))">&#128264; 模範解答を聞く</button>
+      </div>
+      <div class="model-answer" id="emModel_${currentEmCase}_${i}">
+        <h4>模範解答（NEJM＋救急医スタイル）</h4>
+        <p>${s.model.replace(/\n\n/g, '</p><p style="margin-top:0.8rem;">')}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+renderEmCaseSelector();
+renderEmPractice();
+
+// ==================== 座長シミュレーション ====================
+const chairScenarios = [
+  {
+    scene: "セッション開始",
+    infoJa: "あなたは国際救急医学会のセッション「Advances in Trauma Resuscitation」の座長です。共同座長はJohns Hopkins大学のDr. Smithです。発表は4題で、各12分＋質疑3分です。セッションを開始してください。",
+    hint: "自己紹介 → 共同座長の紹介 → セッションテーマ → 発表数・時間配分 → 注意事項の順に述べます。",
+    model: "Good morning, everyone. Welcome to this session on Advances in Trauma Resuscitation. My name is [あなたの名前] from the Department of Emergency Medicine at [施設名]. I am pleased to co-chair this session with Dr. Smith from Johns Hopkins University. In this session, we will have four presentations. Each speaker will have 12 minutes for their presentation, followed by 3 minutes for questions and discussion. For those who wish to ask questions, please use the microphone and state your name and affiliation. Let us begin."
+  },
+  {
+    scene: "演者紹介",
+    infoJa: "次の演者はソウル大学救急医学科のDr. Park Jiwonです。演題は「Prehospital Tourniquet Use in Civilian Mass Casualty Events」です。紹介してください。",
+    hint: "氏名 → 所属 → 演題を簡潔に。30秒以内が目安です。",
+    model: "Our next speaker is Dr. Park Jiwon from the Department of Emergency Medicine at Seoul National University. The title of the presentation is \"Prehospital Tourniquet Use in Civilian Mass Casualty Events.\" Dr. Park, please go ahead."
+  },
+  {
+    scene: "時間超過への対応",
+    infoJa: "Dr. Garciaの発表が12分の持ち時間を超え、すでに14分経過しています。まだスライドが5枚残っているようです。丁寧に、しかし明確に時間切れを伝えてください。",
+    hint: "\"I am sorry to interrupt, but...\" で丁寧に切り出し、残りのポイントのまとめをお願いします。",
+    model: "I am sorry to interrupt, Dr. Garcia, but we have exceeded the allotted time. Could you please summarize your remaining points in about one minute so that we may allow time for questions? Thank you for your understanding."
+  },
+  {
+    scene: "質問が出ない場合",
+    infoJa: "Dr. Leeの「低体温療法の最新エビデンス」に関する発表が終わりました。会場から質問が出ません。座長として質問をして議論を活性化してください。",
+    hint: "自ら質問を投げかけます。「臨床応用」「限界」「今後の展望」などが汎用的なテーマです。",
+    model: "Thank you, Dr. Lee, for that very insightful presentation. While we wait for questions from the audience, I have a question myself. You mentioned that the optimal timing for initiating therapeutic hypothermia remains uncertain. Based on your clinical experience, what would you recommend as a practical approach for emergency physicians in the prehospital setting?"
+  },
+  {
+    scene: "長い質問・コメントへの対応",
+    infoJa: "聴衆の一人が、自分の施設の経験について長々と話し始め、2分以上経過しています。まだ質問に至っていません。他にも質問を待っている人がいます。丁寧に介入してください。",
+    hint: "感謝から入り、質問のポイントを聞き、他の質問者への配慮も示します。",
+    model: "Thank you very much for sharing your valuable experience. In the interest of time, could you please summarize your question so that the speaker may respond and we can also take questions from others in the audience?"
+  },
+  {
+    scene: "セッション閉会",
+    infoJa: "4題の発表が全て終了しました。全体として「外傷初期治療における多職種連携」が重要なテーマとして浮かび上がりました。セッションを締めくくってください。",
+    hint: "要点の総括 → 演者・聴衆への感謝 → 次のセッションへの案内の順で述べます。",
+    model: "With that, we have come to the end of this session. A common theme that has emerged from today's presentations is the critical importance of multidisciplinary collaboration in the initial management of trauma patients. I would like to thank all four speakers for their outstanding presentations and the audience for the stimulating discussion. The next session will begin in 15 minutes in this same room. Please join me in thanking our speakers once again."
+  }
+];
+
+function renderChairPractice() {
+  const el = document.getElementById('chairPracticeContent');
+  el.innerHTML = chairScenarios.map((s, i) => `
+    <div style="margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border);">
+      <h3 style="font-size:1rem; color:var(--primary);">場面${i + 1}：${s.scene}</h3>
+      <div class="case-info-ja"><strong>【場面設定】</strong><br>${s.infoJa}</div>
+      <div class="tip" style="margin-bottom:0.8rem;"><strong>ヒント：</strong>${s.hint}</div>
+      <textarea class="practice-textarea" placeholder="座長として英語で発言を書いてください..."></textarea>
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="document.getElementById('chairModel_${i}').classList.toggle('show')">模範解答を見る</button>
+        <button class="btn btn-accent" onclick="speak(chairScenarios[${i}].model)">&#128264; 模範解答を聞く</button>
+      </div>
+      <div class="model-answer" id="chairModel_${i}">
+        <h4>模範解答</h4>
+        <p>${s.model}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+renderChairPractice();
+
+// ==================== 座長チェックリスト ====================
+const chairCheckItems = [
+  "各演者の氏名の正しい発音を事前に確認した",
+  "各演者の所属・役職を正確に把握した",
+  "各演題の内容を事前に読み、要点を理解した",
+  "各演題に対して2〜3個の質問を準備した",
+  "セッションの時間配分（発表時間・質疑時間）を確認した",
+  "開会・演者紹介・閉会の英語フレーズを声に出して練習した",
+  "時間超過時の丁寧な介入表現を練習した",
+  "質問が出ない場合の自分の質問を英語で準備した",
+  "共同座長がいる場合、役割分担を事前に確認した",
+  "会場のマイク・ポインター・タイマーの操作を確認した",
+  "演者間の繋がり（共通テーマ）を把握し、総合討論に備えた",
+  "閉会の挨拶でセッション全体の要約ポイントを準備した"
+];
+
+function renderChairChecklist() {
+  const saved = JSON.parse(localStorage.getItem('chairChecklist') || '{}');
+  const el = document.getElementById('chairChecklist');
+  el.innerHTML = chairCheckItems.map((item, i) => {
+    const key = `chair_${i}`;
+    const checked = saved[key] ? 'checked' : '';
+    return `<li>
+      <input type="checkbox" id="ccl_${key}" ${checked} onchange="toggleChairCheck('${key}')">
+      <label for="ccl_${key}" class="${checked ? 'checked' : ''}">${item}</label>
+    </li>`;
+  }).join('');
+  const total = chairCheckItems.length;
+  const done = Object.values(saved).filter(Boolean).length;
+  document.getElementById('chairCheckProgress').style.width = `${(done / total) * 100}%`;
+  document.getElementById('chairCheckCount').textContent = `${done} / ${total} 達成`;
+}
+
+function toggleChairCheck(key) {
+  const saved = JSON.parse(localStorage.getItem('chairChecklist') || '{}');
+  saved[key] = !saved[key];
+  localStorage.setItem('chairChecklist', JSON.stringify(saved));
+  renderChairChecklist();
+}
+
+renderChairChecklist();
+</script>
+</body>
+</html>

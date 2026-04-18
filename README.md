@@ -47,7 +47,7 @@ Web Speech API を使用しています。Chrome / Safari / Edge など主要ブ
 case-presentation-app/
 ├── index.html   # アプリ本体（HTML + CSS + JavaScript の単一ファイル）
 ├── README.md    # このファイル
-└── LICENSE      # CC BY-NC-SA 4.0 ライセンス
+└── LICENSE      # CC BY-NC-ND 4.0 ライセンス
 ```
 
 ## 免責事項・帰属表示
@@ -71,9 +71,11 @@ case-presentation-app/
 
 ## ライセンス
 
-[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja) (Creative Commons 表示-非営利-継承 4.0 国際)
+[CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ja) (Creative Commons 表示-非営利-改変禁止 4.0 国際)
 
-教育目的での利用・改変・再配布は自由です。商用利用はできません。
+© 2026 Shunichiro Nakao, The University of Osaka. Licensed under CC BY-NC-ND 4.0.
+
+教育目的での利用・再配布は自由です。改変・商用利用はできません。
 
 ## 作成者
 

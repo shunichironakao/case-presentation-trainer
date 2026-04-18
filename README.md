@@ -1,89 +1,83 @@
-# Medical Academic English Trainer
+# Medical English Presentation Trainer / 医学英語プレゼンテーション トレーナー
 
-医学論文執筆・学会発表のための学術英語教材（Web App）
+NEJM (New England Journal of Medicine) の Case Records 形式に基づく英語症例提示と、国際学会での座長英語を学ぶためのインタラクティブ教材です。日本人の若手救急医を主な対象としています。
 
-## Overview
+## 特徴
 
-医学研究者・臨床医が学術英語を体系的に学ぶためのインタラクティブなウェブ教材です。論文執筆（IMRaD形式）から学会発表、救急医のプレゼンテーションまで幅広くカバーしています。
+- **NEJM 症例提示テンプレート** — 標準的な NEJM Case Records の構成と定型表現を解説
+- **救急医の症例提示テンプレート** — Primary Survey (ABCDE) → 蘇生 → Secondary Survey の流れを NEJM 形式と融合
+- **セクション別重要フレーズ集** — 日本語対訳・音声読み上げ付き
+- **練習問題（計10症例）** — 日本語の症例情報から英語プレゼンを書く練習（模範解答・音声付き）
+  - NEJM 形式 5症例：胸痛、呼吸困難と発熱、意識障害、腹痛、脳卒中
+  - 救急医の型 5症例：多発外傷、敗血症性ショック、急性冠症候群、アナフィラキシー、心肺停止後
+- **確認テスト** — NEJM の表現規則に関する 10 問のクイズ（解説付き）
+- **自己評価チェックリスト** — 構成・表現・デリバリーの到達度管理
+- **国際学会 座長英語** — セッション開会から閉会までの全場面の定型表現と 6 場面のシミュレーション練習
 
-## Features
+## 使い方
 
-| セクション | 内容 |
-|---|---|
-| **論文執筆 Writing** | IMRaD形式に沿った各セクション（Title/Abstract, Introduction, Methods, Results, Discussion, Cover Letter）の定型表現 |
-| **学会発表 Presentation** | 口頭発表、ポスター発表、質疑応答、座長（Session Chair）、救急プレゼン（Primary/Secondary Assessment）の表現 |
-| **学術文法 Grammar** | 時制、能動態/受動態、Hedging、日本人研究者がよくする間違い、北米英語/英国英語の違い |
-| **専門語彙 Vocabulary** | 研究デザイン、統計用語、接続表現、査読対応の用語 |
-| **練習問題 Quiz** | 各セクションに対応した選択式クイズ（ランダム出題） |
-
-## Usage
-
-### ローカルで開く
+単一の HTML ファイルで動作します。サーバー不要で、ブラウザで直接開けます。
 
 ```bash
+# ローカルで開く
 open index.html
+
+# または任意の HTTP サーバーで配信
+python3 -m http.server 8000
 ```
 
-ブラウザで `index.html` を直接開くだけで使用できます。サーバーやビルドツールは不要です。
+### 音声読み上げ
 
-### GitHub Pages で公開する
+Web Speech API を使用しています。Chrome / Safari / Edge など主要ブラウザで動作します。
+スピーカーボタンをクリックすると、英語フレーズの発音を確認できます。
 
-1. このリポジトリを GitHub にプッシュ
-2. Settings → Pages → Source を `main` ブランチ、`/ (root)` に設定
-3. `https://<username>.github.io/<repository-name>/` でアクセス可能
+### 進捗の保存
 
-## File Structure
+自己評価チェックリストと座長準備チェックリストの進捗は、ブラウザの localStorage に保存されます。
+
+## 対象
+
+- 英語での症例プレゼンテーションを学ぶ日本人の若手救急医
+- 国際学会で座長を務める予定の医師
+- 医学英語教育に携わる指導医
+
+## ファイル構成
 
 ```
-academic-english/
-├── index.html    # アプリ本体（HTML/CSS/JS 単一ファイル）
-├── README.md     # このファイル
-└── LICENSE       # CC BY-NC-SA 4.0
+case-presentation-app/
+├── index.html   # アプリ本体（HTML + CSS + JavaScript の単一ファイル）
+├── README.md    # このファイル
+└── LICENSE      # CC BY-NC-SA 4.0 ライセンス
 ```
 
-## Technology
+## 免責事項・帰属表示
 
-- HTML5 / CSS3 / Vanilla JavaScript
-- 外部ライブラリ・フレームワーク不使用
-- レスポンシブ対応（モバイル・タブレット・デスクトップ）
+本教材は、*New England Journal of Medicine* (NEJM) の「Case Records of the Massachusetts General Hospital」シリーズの**公開されている構成形式・文体上の慣行**を参考に、教育目的で独自に作成したものです。
 
-## References
+- NEJM に掲載された症例報告の原文を引用・転載したものではありません
+- 掲載されている練習症例は**全て架空**のものです
+- NEJM、Massachusetts General Hospital、Massachusetts Medical Society とは一切関係がなく、これらの組織による承認・推薦を受けたものではありません
 
-本教材で言及しているガイドライン・基準の主な出典：
+### 参考にした概念・ガイドライン
 
-- **ICMJE** — International Committee of Medical Journal Editors. *Recommendations for the Conduct, Reporting, Editing, and Publication of Scholarly Work in Medical Journals.* Updated December 2023.
-- **CONSORT** — Schulz KF, et al. CONSORT 2010 statement. *BMJ.* 2010;340:c332.
-- **STROBE** — von Elm E, et al. The STROBE statement. *Lancet.* 2007;370(9596):1453-1457.
-- **PRISMA** — Page MJ, et al. The PRISMA 2020 statement. *BMJ.* 2021;372:n71.
-- **AMA Manual of Style** — 11th ed. Oxford University Press; 2020.
-- **GCS** — Teasdale G, Jennett B. *Lancet.* 1974;2(7872):81-84.
-- **ABCDEアプローチ** — Thim T, et al. *Int J Gen Med.* 2012;5:117-121; Resuscitation Council UK.
+| 概念 | 出典 |
+|------|------|
+| NEJM Case Records の構成形式 | *N Engl J Med* — Case Records of the Massachusetts General Hospital (ongoing series) |
+| Primary Survey (ABCDE) アプローチ | ATLS (Advanced Trauma Life Support), American College of Surgeons |
+| 敗血症管理 | Evans L, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. *Crit Care Med*. 2021;49(11):e1063-e1143. |
+| 脳卒中急性期管理 | Powers WJ, et al. Guidelines for the Early Management of Patients With Acute Ischemic Stroke. *Stroke*. 2019;50(12):e344-e418. |
+| 心肺蘇生 | Panchal AR, et al. 2020 AHA Guidelines for CPR and ECC. *Circulation*. 2020;142(16_suppl_2). |
+| アナフィラキシー管理 | Cardona V, et al. World Allergy Organization Anaphylaxis Guidance 2020. *World Allergy Organ J*. 2020;13(10):100472. |
 
-全参考文献はアプリ内フッターの「参考文献・出典」セクションに記載しています。
+## ライセンス
 
-## Disclaimer
-
-- 本教材のフレーズ・例文はすべてオリジナルに作成した汎用的な学術定型表現です
-- 症例・データはすべて架空であり、実在の患者情報は含まれていません
-- 本教材は言語学習を目的としており、臨床判断の根拠として使用しないでください
-
-## AI Assistance
-
-本教材の作成にあたり、生成AI（Claude, Anthropic）を活用しました。
-
-## Contributing
-
-Issue や Pull Request を歓迎します。
-
-## License
-
-[CC BY-NC-SA 4.0](LICENSE) — Creative Commons 表示-非営利-継承 4.0 国際
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja) (Creative Commons 表示-非営利-継承 4.0 国際)
 
 教育目的での利用・改変・再配布は自由です。商用利用はできません。
 
-詳細: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja
+## 作成者
 
-## Author
-
-Shunichiro Nakao, MD, MSc, PhD  
+**Shunichiro Nakao, MD, MSc, PhD**
 Department of Traumatology and Acute Critical Medicine, The University of Osaka
+
+本教材の作成にあたり、生成AI（Claude, Anthropic）を活用しました。

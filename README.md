@@ -77,7 +77,7 @@ case-presentation-app/
 
 ## 作成者
 
-**Shunichiro Nakao, MD, MSc, PhD**
+**Shunichiro Nakao, MD, MSc, PhD**<br>
 Department of Traumatology and Acute Critical Medicine, The University of Osaka
 
 本教材の作成にあたり、生成AI（Claude, Anthropic）を活用しました。

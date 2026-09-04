@@ -63,7 +63,7 @@ case-presentation-app/
 | 概念 | 出典 |
 |------|------|
 | NEJM Case Records の構成形式 | *N Engl J Med* — Case Records of the Massachusetts General Hospital (ongoing series) |
-| Primary Survey (ABCDE) アプローチ | ATLS (Advanced Trauma Life Support), American College of Surgeons |
+| Primary Survey (ABCDE) アプローチ | ATLS、ACLS、ERC ガイドラインなど、救急医療・蘇生医学の教育プログラムで広く共有されている評価概念 |
 | 敗血症管理 | Evans L, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. *Crit Care Med*. 2021;49(11):e1063-e1143. |
 | 脳卒中急性期管理 | Powers WJ, et al. Guidelines for the Early Management of Patients With Acute Ischemic Stroke. *Stroke*. 2019;50(12):e344-e418. |
 | 心肺蘇生 | Panchal AR, et al. 2020 AHA Guidelines for CPR and ECC. *Circulation*. 2020;142(16_suppl_2). |
